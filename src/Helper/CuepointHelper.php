@@ -47,9 +47,17 @@ class CuepointHelper extends AbstractHelper
                 'message' => 'Something went wrong'
             ];
         }
+
+        $timestamp     = '';
+        $responseArray = explode(':', $response->getBody());
+        if (isset($responseArray) && count($responseArray)) {
+            $timestamp = array_pop($responseArray);
+        }
+
         return [
-            'code'    => 200,
-            'message' => $data['text']
+            'code'      => 200,
+            'message'   => $data['text'],
+            'timestamp' => $timestamp
         ];
     }
 }
