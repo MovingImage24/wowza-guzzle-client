@@ -34,7 +34,10 @@ class CuepointHelper extends AbstractHelper
      */
     public function parseResponse(Response $response, array $data)
     {
-        if ($response->getStatusCode() === 400) {
+        if (preg_match('/.* is requirde/', $response->getBody()) ||
+            preg_match('/.* not found/', $response->getBody()) ||
+            $response->getStatusCode() === 400
+        ) {
             return [
                 'code'    => 400,
                 'message' => 'Bad Request'
@@ -47,9 +50,17 @@ class CuepointHelper extends AbstractHelper
                 'message' => 'Something went wrong'
             ];
         }
+
+        $timestamp     = '';
+        $responseArray = explode(':', $response->getBody());
+        if (isset($responseArray) && count($responseArray)) {
+            $timestamp = array_pop($responseArray);
+        }
+
         return [
-            'code'    => 200,
-            'message' => $data['text']
+            'code'      => 200,
+            'message'   => $data['text'],
+            'timestamp' => $timestamp
         ];
     }
 }
