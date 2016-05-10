@@ -34,8 +34,8 @@ class CuepointHelper extends AbstractHelper
      */
     public function parseResponse(Response $response, array $data)
     {
-        if (strpos($response->getBody(), 'is required') >= 0 ||
-            strpos($response->getBody(), 'not found') >= 0 ||
+        if (preg_match('/.* is requirde/', $response->getBody()) ||
+            preg_match('/.* not found/', $response->getBody()) ||
             $response->getStatusCode() === 400
         ) {
             return [

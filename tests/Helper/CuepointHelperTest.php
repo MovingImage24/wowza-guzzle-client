@@ -48,16 +48,37 @@ class CuepointHelperTest extends \PHPUnit_Framework_TestCase
         $data     = [
             'text' => 'cuepointfoo'
         ];
-        $response = new Response(200, ['foo' => 'bar']);
+        $response = new Response(200, ['foo' => 'bar'], 'Timestamp: 123');
         $result   = $this->obj->parseResponse($response, $data);
         $this->assertEquals(
             [
                 'code'    => 200,
-                'message' => 'cuepointfoo'
+                'message' => 'cuepointfoo',
+                'timestamp' => '123'
             ],
             $result
         );
 
+        $response = new Response('200', ['foo' => 'bar'], 'foobar is requirde');
+        $result   = $this->obj->parseResponse($response, $data);
+        $this->assertEquals(
+            [
+                'code'    => 400,
+                'message' => 'Bad Request'
+            ],
+            $result
+        );
+
+        $response = new Response('200', ['foo' => 'bar'], 'foobar not found');
+        $result   = $this->obj->parseResponse($response, $data);
+        $this->assertEquals(
+            [
+                'code'    => 400,
+                'message' => 'Bad Request'
+            ],
+            $result
+        );
+        
         $response = new Response('404', ['foo' => 'bar']);
         $result   = $this->obj->parseResponse($response, $data);
         $this->assertEquals(
