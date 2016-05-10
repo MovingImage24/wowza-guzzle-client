@@ -34,7 +34,10 @@ class CuepointHelper extends AbstractHelper
      */
     public function parseResponse(Response $response, array $data)
     {
-        if ($response->getStatusCode() === 400) {
+        if (strpos($response->getBody(), 'is required') >= 0 ||
+            strpos($response->getBody(), 'not found') >= 0 ||
+            $response->getStatusCode() === 400
+        ) {
             return [
                 'code'    => 400,
                 'message' => 'Bad Request'
