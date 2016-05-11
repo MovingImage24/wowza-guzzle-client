@@ -59,7 +59,7 @@ class CuepointHelperTest extends \PHPUnit_Framework_TestCase
             $result
         );
 
-        $response = new Response('200', ['foo' => 'bar'], 'foobar is requirde');
+        $response = new Response('200', ['foo' => 'bar'], 'foobar is required');
         $result   = $this->obj->parseResponse($response, $data);
         $this->assertEquals(
             [
