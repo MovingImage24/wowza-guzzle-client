@@ -7,7 +7,7 @@ use GuzzleHttp\Psr7\Response;
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
  */
-class WowzaCuepointHelper extends AbstractHelper
+class WowzaCuepointHelper extends AbstractWowzaHelper
 {
     /**
      * @param string $method

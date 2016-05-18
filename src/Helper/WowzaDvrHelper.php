@@ -7,7 +7,7 @@ use GuzzleHttp\Psr7\Response;
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
  */
-class WowzaDvrHelper extends AbstractHelper
+class WowzaDvrHelper extends AbstractWowzaHelper
 {
 
     /**
