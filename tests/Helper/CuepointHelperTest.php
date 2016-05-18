@@ -4,7 +4,7 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper\Tests;
 
 use GuzzleHttp\Psr7\Response;
-use Mi\Bundle\WowzaGuzzleClientBundle\Helper\CuepointHelper;
+use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaCuepointHelper;
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
@@ -12,12 +12,12 @@ use Mi\Bundle\WowzaGuzzleClientBundle\Helper\CuepointHelper;
  */
 class CuepointHelperTest extends \PHPUnit_Framework_TestCase
 {
-    /**@var CuepointHelper $obj */
+    /**@var WowzaCuepointHelper $obj */
     private $obj;
 
     public function setUp()
     {
-        $this->obj = new CuepointHelper();
+        $this->obj = new WowzaCuepointHelper();
     }
 
     /**

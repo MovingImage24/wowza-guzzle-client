@@ -4,7 +4,7 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper\Tests;
 
 use GuzzleHttp\Psr7\Response;
-use Mi\Bundle\WowzaGuzzleClientBundle\Helper\RecordingHelper;
+use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaRecordingHelper;
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
@@ -12,12 +12,12 @@ use Mi\Bundle\WowzaGuzzleClientBundle\Helper\RecordingHelper;
  */
 class RecordingHelperTest extends \PHPUnit_Framework_TestCase
 {
-    /**@var RecordingHelper $obj */
+    /**@var WowzaRecordingHelper $obj */
     private $obj;
 
     public function setUp()
     {
-        $this->obj = new RecordingHelper();
+        $this->obj = new WowzaRecordingHelper();
     }
 
     /**

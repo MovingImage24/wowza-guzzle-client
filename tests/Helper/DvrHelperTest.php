@@ -6,7 +6,7 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper\Tests;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\Response;
-use Mi\Bundle\WowzaGuzzleClientBundle\Helper\DvrHelper;
+use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaDvrHelper;
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
@@ -14,12 +14,12 @@ use Mi\Bundle\WowzaGuzzleClientBundle\Helper\DvrHelper;
  */
 class DvrHelperTest extends \PHPUnit_Framework_TestCase
 {
-    /**@var DvrHelper $obj */
+    /**@var WowzaDvrHelper $obj */
     private $obj;
 
     public function setUp()
     {
-        $this->obj = new DvrHelper();
+        $this->obj = new WowzaDvrHelper();
     }
 
     /**
