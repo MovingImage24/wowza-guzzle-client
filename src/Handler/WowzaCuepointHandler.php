@@ -3,7 +3,7 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 
 use GuzzleHttp\Client;
-use Mi\Bundle\WowzaGuzzleClientBundle\Helper\CuepointHelper;
+use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaCuepointHelper;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -15,16 +15,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class WowzaCuepointHandler extends WowzaApiClient implements CuepointHandler
 {
-    /**@var CuepointHelper $cuepointHelper */
+    /**@var WowzaCuepointHelper $cuepointHelper */
     private $cuepointHelper;
     private $data = [];
 
     /**
      * @param array          $wowzaConfig
      * @param Client         $client
-     * @param CuepointHelper $cuepointHelper
+     * @param WowzaCuepointHelper $cuepointHelper
      */
-    public function __construct(array $wowzaConfig, Client $client, CuepointHelper $cuepointHelper)
+    public function __construct(array $wowzaConfig, Client $client, WowzaCuepointHelper $cuepointHelper)
     {
         parent::__construct($wowzaConfig, $client);
 
