@@ -3,7 +3,7 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 
 use GuzzleHttp\Client;
-use Mi\Bundle\WowzaGuzzleClientBundle\Helper\RecordingHelper;
+use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaRecordingHelper;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -13,18 +13,18 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @codeCoverageIgnore
  */
-class WowzaRecordingHandler extends WowzaApiClient
+class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
 {
-    /**@var RecordingHelper $recordingHelper */
+    /**@var WowzaRecordingHelper $recordingHelper */
     private $recordingHelper;
     private $data = [];
 
     /**
      * @param array           $wowzaConfig
      * @param Client          $client
-     * @param RecordingHelper $recordingHelper
+     * @param WowzaRecordingHelper $recordingHelper
      */
-    public function __construct(array $wowzaConfig, Client $client, RecordingHelper $recordingHelper)
+    public function __construct(array $wowzaConfig, Client $client, WowzaRecordingHelper $recordingHelper)
     {
         parent::__construct($wowzaConfig, $client);
 

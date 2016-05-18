@@ -3,7 +3,7 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 
 use GuzzleHttp\Client;
-use Mi\Bundle\WowzaGuzzleClientBundle\Helper\DvrHelper;
+use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaDvrHelper;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class WowzaDvrHandler extends WowzaApiClient implements DvrHandler
 {
-    /**@var DvrHelper $dvrHelper */
+    /**@var WowzaDvrHelper $dvrHelper */
     private $dvrHelper;
     private $data = [];
 
@@ -24,9 +24,9 @@ class WowzaDvrHandler extends WowzaApiClient implements DvrHandler
      *
      * @param array     $wowzaConfig
      * @param Client    $client
-     * @param DvrHelper $dvrHelper
+     * @param WowzaDvrHelper $dvrHelper
      */
-    public function __construct(array $wowzaConfig, Client $client, DvrHelper $dvrHelper)
+    public function __construct(array $wowzaConfig, Client $client, WowzaDvrHelper $dvrHelper)
     {
         parent::__construct($wowzaConfig, $client);
 
