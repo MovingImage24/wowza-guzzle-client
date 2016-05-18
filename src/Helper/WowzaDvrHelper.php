@@ -7,8 +7,9 @@ use GuzzleHttp\Psr7\Response;
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
  */
-class CuepointHelper extends AbstractHelper
+class WowzaDvrHelper extends AbstractHelper
 {
+
     /**
      * @param string $method
      * @param array  $data
@@ -23,7 +24,8 @@ class CuepointHelper extends AbstractHelper
         '/' . $method .
         '?app=' . $data['wowzaApp'] .
         '&streamname=' . $data['streamname'] .
-        '&text=' . $data['text'];
+        '&recordingname=' . $data['recordingname'] .
+        '&action=' . $data['action'];
     }
 
     /**
@@ -34,33 +36,28 @@ class CuepointHelper extends AbstractHelper
      */
     public function parseResponse(Response $response, array $data)
     {
-        if (preg_match('/.* is required/', $response->getBody()) ||
-            preg_match('/.* not found/', $response->getBody()) ||
-            $response->getStatusCode() === 400
-        ) {
+        if (preg_match('/Live stream .* does not exist/', $response->getBody())) {
             return [
-                'code'    => 400,
-                'message' => 'Bad Request'
+                'code' => 404,
+                'message' => $data['streamname'] . ' does not exist'
             ];
         }
 
-        if ($response->getStatusCode() === 404) {
+        if ($response->getStatusCode() === 401) {
             return [
-                'code'    => 404,
-                'message' => 'Something went wrong'
+                'code'    => 401,
+                'message' => 'Bad credentials'
             ];
         }
 
-        $timestamp     = '';
-        $responseArray = explode(':', $response->getBody());
-        if (isset($responseArray) && count($responseArray)) {
-            $timestamp = array_pop($responseArray);
-        }
+        $split = explode(' ', $response->getBody());
 
         return [
-            'code'      => 200,
-            'message'   => $data['text'],
-            'timestamp' => $timestamp
+            'code'    => 200,
+            'message' => [
+                'action'        => $data['action'] . '_dvr',
+                'recordingName' => array_pop($split)
+            ]
         ];
     }
 }

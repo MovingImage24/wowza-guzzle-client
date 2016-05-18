@@ -7,8 +7,9 @@ use GuzzleHttp\Psr7\Response;
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
  */
-class DvrHelper extends AbstractHelper
+class WowzaRecordingHelper extends AbstractHelper
 {
+
 
     /**
      * @param string $method
@@ -24,7 +25,6 @@ class DvrHelper extends AbstractHelper
         '/' . $method .
         '?app=' . $data['wowzaApp'] .
         '&streamname=' . $data['streamname'] .
-        '&recordingname=' . $data['recordingname'] .
         '&action=' . $data['action'];
     }
 
@@ -36,28 +36,23 @@ class DvrHelper extends AbstractHelper
      */
     public function parseResponse(Response $response, array $data)
     {
-        if (preg_match('/Live stream .* does not exist/', $response->getBody())) {
+        if ($response->getStatusCode() === 400) {
             return [
-                'code' => 404,
-                'message' => $data['streamname'] . ' does not exist'
+                'code'    => 400,
+                'message' => 'Bad Request'
             ];
         }
 
-        if ($response->getStatusCode() === 401) {
+        if ($response->getStatusCode() === 404) {
             return [
-                'code'    => 401,
-                'message' => 'Bad credentials'
+                'code'    => 404,
+                'message' => 'Something went wrong'
             ];
         }
-
-        $split = explode(' ', $response->getBody());
 
         return [
             'code'    => 200,
-            'message' => [
-                'action'        => $data['action'] . '_dvr',
-                'recordingName' => array_pop($split)
-            ]
+            'message' => $data['action']
         ];
     }
 }

@@ -9,7 +9,7 @@ use GuzzleHttp\Psr7\Response;
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
  */
-abstract class AbstractHelper
+abstract class AbstractWowzaHelper
 {
     /**
      * @param array  $data
