@@ -3,6 +3,7 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper;
 
 use GuzzleHttp\Client;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
@@ -10,11 +11,11 @@ use GuzzleHttp\Client;
 interface HelperInterface
 {
     /**
-     * @param array  $data
+     * @param WowzaConfig $wowzaConfig
      * @param string $url
      * @param Client $client
      *
      * @return mixed
      */
-    public function call(array $data, $url, Client $client);
+    public function call(WowzaConfig $wowzaConfig, $url, Client $client);
 }
