@@ -10,7 +10,7 @@ use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
  */
-abstract class AbstractWowzaHelper
+abstract class AbstractWowzaHelper implements HelperInterface
 {
     /**
      * @param WowzaConfig $wowzaConfig
