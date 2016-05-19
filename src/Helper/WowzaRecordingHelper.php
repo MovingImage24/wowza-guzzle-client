@@ -7,8 +7,10 @@ use GuzzleHttp\Psr7\Response;
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
  */
-class CuepointHelper extends AbstractHelper
+class WowzaRecordingHelper extends AbstractWowzaHelper
 {
+
+
     /**
      * @param string $method
      * @param array  $data
@@ -23,7 +25,7 @@ class CuepointHelper extends AbstractHelper
         '/' . $method .
         '?app=' . $data['wowzaApp'] .
         '&streamname=' . $data['streamname'] .
-        '&text=' . $data['text'];
+        '&action=' . $data['action'];
     }
 
     /**
@@ -34,10 +36,7 @@ class CuepointHelper extends AbstractHelper
      */
     public function parseResponse(Response $response, array $data)
     {
-        if (preg_match('/.* is required/', $response->getBody()) ||
-            preg_match('/.* not found/', $response->getBody()) ||
-            $response->getStatusCode() === 400
-        ) {
+        if ($response->getStatusCode() === 400) {
             return [
                 'code'    => 400,
                 'message' => 'Bad Request'
@@ -51,16 +50,9 @@ class CuepointHelper extends AbstractHelper
             ];
         }
 
-        $timestamp     = '';
-        $responseArray = explode(':', $response->getBody());
-        if (isset($responseArray) && count($responseArray)) {
-            $timestamp = array_pop($responseArray);
-        }
-
         return [
-            'code'      => 200,
-            'message'   => $data['text'],
-            'timestamp' => $timestamp
+            'code'    => 200,
+            'message' => $data['action']
         ];
     }
 }
