@@ -3,6 +3,7 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper;
 
 use GuzzleHttp\Psr7\Response;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
@@ -10,18 +11,19 @@ use GuzzleHttp\Psr7\Response;
 class WowzaCuepointHelper extends AbstractWowzaHelper
 {
     /**
-     * @param string $method
-     * @param array  $data
+     * @param string      $method
+     * @param WowzaConfig $wowzaConfig
+     * @param array       $data
      *
      * @return string
      */
-    public function buildUrl($method, array $data)
+    public function buildUrl($method, WowzaConfig $wowzaConfig, array $data)
     {
-        return $data['wowzaProtocol'] . '://' .
-        $data['wowzaHostname'] . ':' .
-        $data['wowzaDvrPort'] .
+        return $wowzaConfig->getWowzaProtocol() . '://' .
+        $wowzaConfig->getWowzaHostname() . ':' .
+        $wowzaConfig->getWowzaDvrPort() .
         '/' . $method .
-        '?app=' . $data['wowzaApp'] .
+        '?app=' . $wowzaConfig->getWowzaApp() .
         '&streamname=' . $data['streamname'] .
         '&text=' . $data['text'];
     }

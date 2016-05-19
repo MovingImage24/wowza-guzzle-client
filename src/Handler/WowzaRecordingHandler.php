@@ -4,6 +4,7 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 
 use GuzzleHttp\Client;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaRecordingHelper;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -20,23 +21,15 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
     private $data = [];
 
     /**
-     * @param array           $wowzaConfig
-     * @param Client          $client
+     * @param WowzaConfig          $wowzaConfig
+     * @param Client               $client
      * @param WowzaRecordingHelper $recordingHelper
      */
-    public function __construct(array $wowzaConfig, Client $client, WowzaRecordingHelper $recordingHelper)
+    public function __construct(WowzaConfig $wowzaConfig, Client $client, WowzaRecordingHelper $recordingHelper)
     {
         parent::__construct($wowzaConfig, $client);
 
         $this->recordingHelper = $recordingHelper;
-        $this->data            = [
-            'wowzaAdmin'         => $this->wowzaAdmin,
-            'wowzaAdminPassword' => $this->wowzaAdminPassword,
-            'wowzaProtocol'      => $this->wowzaProtocol,
-            'wowzaHostname'      => $this->wowzaHostname,
-            'wowzaDvrPort'       => $this->wowzaDvrPort,
-            'wowzaApp'           => $this->wowzaApp
-        ];
     }
 
     /**
@@ -76,8 +69,8 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
         $this->data['streamname'] = $streamname;
         $this->data['option']     = $option;
 
-        $url            = $this->recordingHelper->buildUrl('livestreamrecord', $this->data);
-        $result         = $this->recordingHelper->call($this->data, $url, $this->client);
+        $url            = $this->recordingHelper->buildUrl('livestreamrecord', $this->wowzaConfig, $this->data);
+        $result         = $this->recordingHelper->call($this->wowzaConfig, $url, $this->client);
         $parsedResponse = $this->recordingHelper->parseResponse($result, $this->data);
 
         return new JsonResponse($parsedResponse, $parsedResponse['code']);

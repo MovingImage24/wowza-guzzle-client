@@ -3,6 +3,7 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper;
 
 use GuzzleHttp\Psr7\Response;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
@@ -11,18 +12,19 @@ class WowzaDvrHelper extends AbstractWowzaHelper
 {
 
     /**
-     * @param string $method
-     * @param array  $data
+     * @param string      $method
+     * @param WowzaConfig $wowzaConfig
+     * @param array       $data
      *
      * @return string
      */
-    public function buildUrl($method, array $data)
+    public function buildUrl($method, WowzaConfig $wowzaConfig, array $data)
     {
-        return $data['wowzaProtocol'] . '://' .
-        $data['wowzaHostname'] . ':' .
-        $data['wowzaDvrPort'] .
+        return $wowzaConfig->getWowzaProtocol() . '://' .
+        $wowzaConfig->getWowzaHostname() . ':' .
+        $wowzaConfig->getWowzaDvrPort() .
         '/' . $method .
-        '?app=' . $data['wowzaApp'] .
+        '?app=' . $wowzaConfig->getWowzaApp() .
         '&streamname=' . $data['streamname'] .
         '&recordingname=' . $data['recordingname'] .
         '&action=' . $data['action'];
@@ -38,7 +40,7 @@ class WowzaDvrHelper extends AbstractWowzaHelper
     {
         if (preg_match('/Live stream .* does not exist/', $response->getBody())) {
             return [
-                'code' => 404,
+                'code'    => 404,
                 'message' => $data['streamname'] . ' does not exist'
             ];
         }

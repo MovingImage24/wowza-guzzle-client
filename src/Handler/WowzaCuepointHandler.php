@@ -4,6 +4,7 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 
 use GuzzleHttp\Client;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaCuepointHelper;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -20,23 +21,23 @@ class WowzaCuepointHandler extends WowzaApiClient implements CuepointHandler
     private $data = [];
 
     /**
-     * @param array          $wowzaConfig
-     * @param Client         $client
+     * @param WowzaConfig         $wowzaConfig
+     * @param Client              $client
      * @param WowzaCuepointHelper $cuepointHelper
      */
-    public function __construct(array $wowzaConfig, Client $client, WowzaCuepointHelper $cuepointHelper)
+    public function __construct(WowzaConfig $wowzaConfig, Client $client, WowzaCuepointHelper $cuepointHelper)
     {
         parent::__construct($wowzaConfig, $client);
 
         $this->cuepointHelper = $cuepointHelper;
-        $this->data           = [
-            'wowzaAdmin'         => $this->wowzaAdmin,
-            'wowzaAdminPassword' => $this->wowzaAdminPassword,
-            'wowzaProtocol'      => $this->wowzaProtocol,
-            'wowzaHostname'      => $this->wowzaHostname,
-            'wowzaDvrPort'       => $this->wowzaDvrPort,
-            'wowzaApp'           => $this->wowzaApp
-        ];
+//        $this->data           = [
+//            'wowzaAdmin'         => $this->wowzaConfig->getWowzaAdmin(),
+//            'wowzaAdminPassword' => $this->wowzaConfig->getWowzaAdminPassword(),
+//            'wowzaProtocol'      => $this->wowzaConfig->getWowzaProtocol(),
+//            'wowzaHostname'      => $this->wowzaConfig->getWowzaHostname(),
+//            'wowzaDvrPort'       => $this->wowzaConfig->getWowzaDvrPort(),
+//            'wowzaApp'           => $this->wowzaConfig->getWowzaApp()
+//        ];
     }
 
     /**
@@ -51,8 +52,8 @@ class WowzaCuepointHandler extends WowzaApiClient implements CuepointHandler
         $this->data['streamname'] = $streamname;
         $this->data['text']       = $text;
 
-        $url            = $this->cuepointHelper->buildUrl('livesetmetadata', $this->data);
-        $result         = $this->cuepointHelper->call($this->data, $url, $this->client);
+        $url            = $this->cuepointHelper->buildUrl('livesetmetadata', $this->wowzaConfig, $this->data);
+        $result         = $this->cuepointHelper->call($this->wowzaConfig, $url, $this->client);
         $parsedResponse = $this->cuepointHelper->parseResponse($result, $this->data);
 
         return new JsonResponse($parsedResponse, $parsedResponse['code']);

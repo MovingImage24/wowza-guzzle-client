@@ -11,11 +11,18 @@
     </parameters>
 
     <services>
+
         <service id="mi_wowza_guzzle_api" class="Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient">
-            <argument type="collection">
-                <argument>%mi_wowza_guzzle_client%</argument>
-            </argument>
+            <argument type="service" id="mi_wowza_config_model"/>
             <argument type="service" id="guzzle_client_wowza"/>
+        </service>
+
+        <service id="guzzle_client_wowza" class="GuzzleHttp\Client" public="false">
+            <argument>%guzzle_client_config%</argument>
+        </service>
+
+        <service id="mi_wowza_config_model" class="Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig">
+            <argument>%mi_wowza_guzzle_client%</argument>
         </service>
 
         <service id="mi_wowza_dvr_handler" class="Mi\Bundle\WowzaGuzzleClientBundle\Handler\WowzaDvrHandler"
@@ -45,9 +52,6 @@
                  class="Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaCuepointHelper">
         </service>
 
-        <service id="guzzle_client_wowza" class="GuzzleHttp\Client" public="false">
-            <argument>%guzzle_client_config%</argument>
-        </service>
 
     </services>
 </container>
