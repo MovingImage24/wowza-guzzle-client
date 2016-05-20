@@ -7,7 +7,6 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Model;
  */
 final class WowzaConfig
 {
-    private $wowzaConfig;
     private $wowzaProtocol;
     private $wowzaHostname;
     private $wowzaDvrPort;
@@ -22,22 +21,12 @@ final class WowzaConfig
      */
     public function __construct(array $wowzaConfig)
     {
-        $this->wowzaConfig        = $wowzaConfig;
         $this->wowzaProtocol      = $wowzaConfig['wowza_protocol'];
         $this->wowzaHostname      = $wowzaConfig['wowza_hostname'];
         $this->wowzaDvrPort       = $wowzaConfig['wowza_dvr_port'];
         $this->wowzaAdmin         = $wowzaConfig['wowza_admin'];
         $this->wowzaAdminPassword = $wowzaConfig['wowza_admin_password'];
         $this->wowzaApp           = $wowzaConfig['wowza_app'];
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getWowzaConfig()
-    {
-        return $this->wowzaConfig;
     }
 
     /**
