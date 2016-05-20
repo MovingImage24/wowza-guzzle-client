@@ -6,6 +6,8 @@ use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
+ *
+ * @codeCoverageIgnore
  */
 final class WowzaCuepoint extends WowzaModel implements Cuepoint
 {
