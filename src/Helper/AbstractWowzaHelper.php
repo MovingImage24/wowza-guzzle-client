@@ -6,11 +6,12 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
  */
-abstract class AbstractWowzaHelper implements HelperInterface
+abstract class AbstractWowzaHelper
 {
     /**
      * @param WowzaConfig $wowzaConfig
@@ -42,17 +43,17 @@ abstract class AbstractWowzaHelper implements HelperInterface
     /**
      * @param string      $method
      * @param WowzaConfig $wowzaConfig
-     * @param array       $data
+     * @param WowzaModel  $cuepoint
      *
      * @return string
      */
-    abstract function buildUrl($method, WowzaConfig $wowzaConfig, array $data);
+    abstract function buildUrl($method, WowzaConfig $wowzaConfig, WowzaModel $cuepoint);
 
     /**
-     * @param Response $response
-     * @param array    $data
+     * @param Response   $response
+     * @param WowzaModel $cuepoint
      *
      * @return array
      */
-    abstract function parseResponse(Response $response, array $data);
+    abstract function parseResponse(Response $response, WowzaModel $cuepoint);
 }

@@ -4,6 +4,7 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 
 use GuzzleHttp\Client;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaRecordingHelper;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\Recording\WowzaRecording;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,18 +19,25 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
 {
     /**@var WowzaRecordingHelper $recordingHelper */
     private $recordingHelper;
-    private $data = [];
+    private $recording;
 
     /**
      * @param WowzaConfig          $wowzaConfig
      * @param Client               $client
      * @param WowzaRecordingHelper $recordingHelper
+     * @param WowzaRecording       $recording
      */
-    public function __construct(WowzaConfig $wowzaConfig, Client $client, WowzaRecordingHelper $recordingHelper)
+    public function __construct(
+        WowzaConfig $wowzaConfig,
+        Client $client,
+        WowzaRecordingHelper $recordingHelper,
+        WowzaRecording $recording
+    )
     {
         parent::__construct($wowzaConfig, $client);
 
         $this->recordingHelper = $recordingHelper;
+        $this->recording       = $recording;
     }
 
     /**
@@ -40,7 +48,7 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
      */
     public function startRecording($streamname, $option = 'append')
     {
-        $this->data['action'] = 'startRecording';
+        $this->recording->setAction('startRecording');
 
         return $this->recordingTask($streamname, $option);
     }
@@ -53,7 +61,7 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
      */
     public function stopRecording($streamname, $option = 'append')
     {
-        $this->data['action'] = 'stopRecording';
+        $this->recording->setAction('stopRecording');
 
         return $this->recordingTask($streamname, $option);
     }
@@ -66,12 +74,12 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
      */
     private function recordingTask($streamname, $option)
     {
-        $this->data['streamname'] = $streamname;
-        $this->data['option']     = $option;
+        $this->recording->setStreamname($streamname);
+        $this->recording->setOption($option);
 
-        $url            = $this->recordingHelper->buildUrl('livestreamrecord', $this->wowzaConfig, $this->data);
+        $url            = $this->recordingHelper->buildUrl('livestreamrecord', $this->wowzaConfig, $this->recording);
         $result         = $this->recordingHelper->call($this->wowzaConfig, $url, $this->client);
-        $parsedResponse = $this->recordingHelper->parseResponse($result, $this->data);
+        $parsedResponse = $this->recordingHelper->parseResponse($result, $this->recording);
 
         return new JsonResponse($parsedResponse, $parsedResponse['code']);
     }

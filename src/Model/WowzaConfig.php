@@ -5,7 +5,7 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Model;
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
  */
-class WowzaConfig
+final class WowzaConfig
 {
     private $wowzaConfig;
     private $wowzaProtocol;

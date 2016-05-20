@@ -5,6 +5,7 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 use GuzzleHttp\Client;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaCuepointHelper;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\WowzaCuepoint;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -18,26 +19,26 @@ class WowzaCuepointHandler extends WowzaApiClient implements CuepointHandler
 {
     /**@var WowzaCuepointHelper $cuepointHelper */
     private $cuepointHelper;
-    private $data = [];
+    /**@var WowzaCuepoint $cuepoint */
+    private $cuepoint;
 
     /**
      * @param WowzaConfig         $wowzaConfig
      * @param Client              $client
      * @param WowzaCuepointHelper $cuepointHelper
+     * @param WowzaCuepoint       $cuepointModel
      */
-    public function __construct(WowzaConfig $wowzaConfig, Client $client, WowzaCuepointHelper $cuepointHelper)
+    public function __construct(
+        WowzaConfig $wowzaConfig,
+        Client $client,
+        WowzaCuepointHelper $cuepointHelper,
+        WowzaCuepoint $cuepointModel
+    )
     {
         parent::__construct($wowzaConfig, $client);
 
         $this->cuepointHelper = $cuepointHelper;
-//        $this->data           = [
-//            'wowzaAdmin'         => $this->wowzaConfig->getWowzaAdmin(),
-//            'wowzaAdminPassword' => $this->wowzaConfig->getWowzaAdminPassword(),
-//            'wowzaProtocol'      => $this->wowzaConfig->getWowzaProtocol(),
-//            'wowzaHostname'      => $this->wowzaConfig->getWowzaHostname(),
-//            'wowzaDvrPort'       => $this->wowzaConfig->getWowzaDvrPort(),
-//            'wowzaApp'           => $this->wowzaConfig->getWowzaApp()
-//        ];
+        $this->cuepoint       = $cuepointModel;
     }
 
     /**
@@ -48,13 +49,13 @@ class WowzaCuepointHandler extends WowzaApiClient implements CuepointHandler
      */
     public function insertCuepoint($streamname, $text)
     {
-        $this->data['action']     = 'cuepoint';
-        $this->data['streamname'] = $streamname;
-        $this->data['text']       = $text;
+        $this->cuepoint->setAction('cuepoint');
+        $this->cuepoint->setStreamname($streamname);
+        $this->cuepoint->setText($text);
 
-        $url            = $this->cuepointHelper->buildUrl('livesetmetadata', $this->wowzaConfig, $this->data);
+        $url            = $this->cuepointHelper->buildUrl('livesetmetadata', $this->wowzaConfig, $this->cuepoint);
         $result         = $this->cuepointHelper->call($this->wowzaConfig, $url, $this->client);
-        $parsedResponse = $this->cuepointHelper->parseResponse($result, $this->data);
+        $parsedResponse = $this->cuepointHelper->parseResponse($result, $this->cuepoint);
 
         return new JsonResponse($parsedResponse, $parsedResponse['code']);
     }

@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+
+        <service id="mi_wowza_config_model" class="Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig">
+            <argument>%mi_wowza_guzzle_client%</argument>
+        </service>
+
+        <service id="mi_wowza_cuepoint_model" class="Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\WowzaCuepoint">
+        </service>
+
+        <service id="mi_wowza_dvr_model" class="Mi\Bundle\WowzaGuzzleClientBundle\Model\Dvr\WowzaDvr">
+        </service>
+
+        <service id="mi_wowza_recording_model" class="Mi\Bundle\WowzaGuzzleClientBundle\Model\Recording\WowzaRecording">
+        </service>
+
+    </services>
+</container>

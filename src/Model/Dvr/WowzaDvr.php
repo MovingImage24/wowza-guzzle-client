@@ -1,25 +1,17 @@
 <?php
 
-namespace Mi\Bundle\WowzaGuzzleClientBundle\Model;
+namespace Mi\Bundle\WowzaGuzzleClientBundle\Model\Dvr;
+
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
  */
-final class WowzaCuepoint extends WowzaConfig
+final class WowzaDvr extends WowzaModel implements Dvr
 {
     private $streamname;
+    private $recordingname;
     private $action;
-    private $text;
-
-    /**
-     * WowzaConfig constructor.
-     *
-     * @param array $wowzaConfig
-     */
-    public function __construct(array $wowzaConfig)
-    {
-        parent::__construct($wowzaConfig);
-    }
 
     /**
      * @return mixed
@@ -54,19 +46,19 @@ final class WowzaCuepoint extends WowzaConfig
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getText()
+    public function getRecordingname()
     {
-        return $this->text;
+        return $this->recordingname;
     }
 
     /**
-     * @param mixed $text
+     * @param string $recordingname
      */
-    public function setText($text)
+    public function setRecordingname($recordingname)
     {
-        $this->text = $text;
+        $this->recordingname = $recordingname;
     }
 
 }
