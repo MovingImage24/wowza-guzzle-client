@@ -28,7 +28,7 @@ class WowzaCuepointHelper extends AbstractWowzaHelper
         '/' . $method .
         '?app=' . $wowzaConfig->getWowzaApp() .
         '&streamname=' . $cuepoint->getStreamname() .
-        '&text=' . $cuepoint->getText();
+        '&text=' . urlencode($cuepoint->getText());
     }
 
     /**

@@ -38,13 +38,12 @@ class CuepointHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function buildUrlTest()
     {
-        
         $cuepoint = new WowzaCuepoint();
         $cuepoint->setStreamname('stream');
-        $cuepoint->setText('cuepointfoo');
+        $cuepoint->setText('{"foo":"bar","bla":1}');
 
         $result   = $this->obj->buildUrl('foo', $this->wowzaConfig, $cuepoint);
-        $expected = 'http://host:123/foo?app=app&streamname=stream&text=cuepointfoo';
+        $expected = 'http://host:123/foo?app=app&streamname=stream&text=%7B%22foo%22%3A%22bar%22%2C%22bla%22%3A1%7D';
 
         $this->assertEquals($expected, $result);
     }
