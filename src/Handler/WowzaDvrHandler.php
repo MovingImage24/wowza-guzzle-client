@@ -4,6 +4,8 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 
 use GuzzleHttp\Client;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaDvrHelper;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\Dvr\WowzaDvr;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -17,28 +19,22 @@ class WowzaDvrHandler extends WowzaApiClient implements DvrHandler
 {
     /**@var WowzaDvrHelper $dvrHelper */
     private $dvrHelper;
-    private $data = [];
+    /**@var WowzaDvr $dvr */
+    private $dvr;
 
     /**
      * DvrHandler constructor.
      *
-     * @param array     $wowzaConfig
-     * @param Client    $client
+     * @param WowzaConfig    $wowzaConfig
+     * @param Client         $client
      * @param WowzaDvrHelper $dvrHelper
      */
-    public function __construct(array $wowzaConfig, Client $client, WowzaDvrHelper $dvrHelper)
+    public function __construct(WowzaConfig $wowzaConfig, Client $client, WowzaDvrHelper $dvrHelper, WowzaDvr $dvr)
     {
         parent::__construct($wowzaConfig, $client);
 
         $this->dvrHelper = $dvrHelper;
-        $this->data      = [
-            'wowzaAdmin'         => $this->wowzaAdmin,
-            'wowzaAdminPassword' => $this->wowzaAdminPassword,
-            'wowzaProtocol'      => $this->wowzaProtocol,
-            'wowzaHostname'      => $this->wowzaHostname,
-            'wowzaDvrPort'       => $this->wowzaDvrPort,
-            'wowzaApp'           => $this->wowzaApp
-        ];
+        $this->dvr       = $dvr;
     }
 
     /**
@@ -49,7 +45,7 @@ class WowzaDvrHandler extends WowzaApiClient implements DvrHandler
      */
     public function startDvr($streamname, $recordingname)
     {
-        $this->data['action'] = 'start';
+        $this->dvr->setAction('start');
 
         return $this->dvrTask($streamname, $recordingname);
     }
@@ -62,7 +58,7 @@ class WowzaDvrHandler extends WowzaApiClient implements DvrHandler
      */
     public function stopDvr($streamname, $recordingname)
     {
-        $this->data['action'] = 'stop';
+        $this->dvr->setAction('stop');
 
         return $this->dvrTask($streamname, $recordingname);
     }
@@ -75,12 +71,12 @@ class WowzaDvrHandler extends WowzaApiClient implements DvrHandler
      */
     private function dvrTask($streamname, $recordingname)
     {
-        $this->data['streamname']    = $streamname;
-        $this->data['recordingname'] = $recordingname;
+        $this->dvr->setStreamname($streamname);
+        $this->dvr->setRecordingname($recordingname);
 
-        $url            = $this->dvrHelper->buildUrl('dvrstreamrecord', $this->data);
-        $result         = $this->dvrHelper->call($this->data, $url, $this->client);
-        $parsedResponse = $this->dvrHelper->parseResponse($result, $this->data);
+        $url            = $this->dvrHelper->buildUrl('dvrstreamrecord', $this->wowzaConfig, $this->dvr);
+        $result         = $this->dvrHelper->call($this->wowzaConfig, $url, $this->client);
+        $parsedResponse = $this->dvrHelper->parseResponse($result, $this->dvr);
 
         return new JsonResponse($parsedResponse, $parsedResponse['code']);
     }

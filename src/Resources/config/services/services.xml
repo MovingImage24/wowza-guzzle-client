@@ -11,38 +11,10 @@
     </parameters>
 
     <services>
+
         <service id="mi_wowza_guzzle_api" class="Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient">
-            <argument type="collection">
-                <argument>%mi_wowza_guzzle_client%</argument>
-            </argument>
+            <argument type="service" id="mi_wowza_config_model"/>
             <argument type="service" id="guzzle_client_wowza"/>
-        </service>
-
-        <service id="mi_wowza_dvr_handler" class="Mi\Bundle\WowzaGuzzleClientBundle\Handler\WowzaDvrHandler"
-                 parent="mi_wowza_guzzle_api">
-            <argument type="service" id="mi_wowza_dvr_helper"/>
-        </service>
-
-        <service id="mi_wowza_recording_handler" class="Mi\Bundle\WowzaGuzzleClientBundle\Handler\WowzaRecordingHandler"
-                 parent="mi_wowza_guzzle_api">
-            <argument type="service" id="mi_wowza_recording_helper"/>
-        </service>
-
-        <service id="mi_wowza_cuepoint_handler" class="Mi\Bundle\WowzaGuzzleClientBundle\Handler\WowzaCuepointHandler"
-                 parent="mi_wowza_guzzle_api">
-            <argument type="service" id="mi_wowza_cuepoint_helper"/>
-        </service>
-
-        <service id="mi_wowza_dvr_helper"
-                 class="Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaDvrHelper">
-        </service>
-
-        <service id="mi_wowza_recording_helper"
-                 class="Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaRecordingHelper">
-        </service>
-
-        <service id="mi_wowza_cuepoint_helper"
-                 class="Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaCuepointHelper">
         </service>
 
         <service id="guzzle_client_wowza" class="GuzzleHttp\Client" public="false">

@@ -5,27 +5,29 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\Response;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
  */
-abstract class AbstractWowzaHelper implements HelperInterface
+abstract class AbstractWowzaHelper
 {
     /**
-     * @param array  $data
-     * @param string $url
-     * @param Client $client
+     * @param WowzaConfig $wowzaConfig
+     * @param string      $url
+     * @param Client      $client
      *
      * @return mixed|null|\Psr\Http\Message\ResponseInterface
      */
-    public function call(array $data, $url, Client $client)
+    public function call(WowzaConfig $wowzaConfig, $url, Client $client)
     {
         try {
             $result = $client->request(
                 'GET',
                 $url,
                 [
-                    'auth' => [$data['wowzaAdmin'], $data['wowzaAdminPassword'], 'Digest']
+                    'auth' => [$wowzaConfig->getWowzaAdmin(), $wowzaConfig->getWowzaAdminPassword(), 'Digest']
                 ]
             );
         } catch (\Exception $e) {
@@ -39,18 +41,19 @@ abstract class AbstractWowzaHelper implements HelperInterface
     }
 
     /**
-     * @param string $method
-     * @param array  $data
+     * @param string      $method
+     * @param WowzaConfig $wowzaConfig
+     * @param WowzaModel  $cuepoint
      *
      * @return string
      */
-    abstract function buildUrl($method, array $data);
+    abstract function buildUrl($method, WowzaConfig $wowzaConfig, WowzaModel $cuepoint);
 
     /**
-     * @param Response $response
-     * @param array    $data
+     * @param Response   $response
+     * @param WowzaModel $cuepoint
      *
      * @return array
      */
-    abstract function parseResponse(Response $response, array $data);
+    abstract function parseResponse(Response $response, WowzaModel $cuepoint);
 }

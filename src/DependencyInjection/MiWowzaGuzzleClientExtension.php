@@ -30,5 +30,8 @@ class MiWowzaGuzzleClientExtension extends ConfigurableExtension
         $loader       = new XmlFileLoader($container, new FileLocator($servicesPath));
 
         $loader->load('services.xml');
+        $loader->load('handler.xml');
+        $loader->load('helper.xml');
+        $loader->load('model.xml');
     }
 }
