@@ -18,5 +18,14 @@
         <service id="mi_wowza_recording_model" class="Mi\Bundle\WowzaGuzzleClientBundle\Model\Recording\WowzaRecording">
         </service>
 
+        <service id="mi_wowza_cuepoint_response_model" class="Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\Response">
+        </service>
+
+        <service id="mi_wowza_dvr_response_model" class="Mi\Bundle\WowzaGuzzleClientBundle\Model\Dvr\Response">
+        </service>
+
+        <service id="mi_wowza_recording_response_model" class="Mi\Bundle\WowzaGuzzleClientBundle\Model\Recording\Response">
+        </service>
+
     </services>
 </container>

@@ -35,30 +35,11 @@ class WowzaRecordingHelper extends AbstractWowzaHelper
 
     /**
      * @param Response   $response
-     * @param WowzaModel $recording
      *
-     * @return array
+     * @return bool
      */
-    public function parseResponse(Response $response, WowzaModel $recording)
+    public function parseResponse(Response $response)
     {
-        /**@var WowzaRecording $recording */
-        if ($response->getStatusCode() === 400) {
-            return [
-                'code'    => 400,
-                'message' => 'Bad Request'
-            ];
-        }
-
-        if ($response->getStatusCode() === 404) {
-            return [
-                'code'    => 404,
-                'message' => 'Something went wrong'
-            ];
-        }
-
-        return [
-            'code'    => 200,
-            'message' => $recording->getAction()
-        ];
+        return true;
     }
 }

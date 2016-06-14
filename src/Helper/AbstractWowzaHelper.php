@@ -4,7 +4,9 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
+use Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiConnectException;
 use GuzzleHttp\Psr7\Response;
+use Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
 
@@ -18,7 +20,9 @@ abstract class AbstractWowzaHelper
      * @param string      $url
      * @param Client      $client
      *
-     * @return mixed|null|\Psr\Http\Message\ResponseInterface
+     * @return mixed|\Psr\Http\Message\ResponseInterface
+     * @throws MiConnectException
+     * @throws MiException
      */
     public function call(WowzaConfig $wowzaConfig, $url, Client $client)
     {
@@ -31,10 +35,11 @@ abstract class AbstractWowzaHelper
                 ]
             );
         } catch (\Exception $e) {
-            $result = new Response(404, [], 'Something went wrong');
             if ($e instanceof ConnectException) {
-                $result = new Response(400, [], $e->getMessage());
+                throw new MiConnectException();
             }
+
+            throw new MiException();
         }
 
         return $result;
@@ -51,9 +56,8 @@ abstract class AbstractWowzaHelper
 
     /**
      * @param Response   $response
-     * @param WowzaModel $cuepoint
      *
      * @return array
      */
-    abstract function parseResponse(Response $response, WowzaModel $cuepoint);
+    abstract function parseResponse(Response $response);
 }

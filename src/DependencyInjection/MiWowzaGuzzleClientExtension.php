@@ -26,10 +26,10 @@ class MiWowzaGuzzleClientExtension extends ConfigurableExtension
      */
     protected function loadInternal(array $mergedConfig, ContainerBuilder $container)
     {
-        $servicesPath = __DIR__ . '/../Resources/config/services';
+        $servicesPath = __DIR__ . '/../Resources/config/service';
         $loader       = new XmlFileLoader($container, new FileLocator($servicesPath));
 
-        $loader->load('services.xml');
+        $loader->load('service.xml');
         $loader->load('handler.xml');
         $loader->load('helper.xml');
         $loader->load('model.xml');

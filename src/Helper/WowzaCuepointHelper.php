@@ -3,6 +3,7 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper;
 
 use GuzzleHttp\Psr7\Response;
+use Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\WowzaCuepoint;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
@@ -31,42 +32,27 @@ class WowzaCuepointHelper extends AbstractWowzaHelper
         '&text=' . urlencode($cuepoint->getText());
     }
 
+
     /**
      * @param Response   $response
-     * @param WowzaModel $cuepoint
      *
      * @return array
+     * @throws MiException
      */
-    public function parseResponse(Response $response, WowzaModel $cuepoint)
+    public function parseResponse(Response $response)
     {
-
         if (preg_match('/.* is required/', $response->getBody()) ||
-            preg_match('/.* not found/', $response->getBody()) ||
-            $response->getStatusCode() === 400
+            preg_match('/.* not found/', $response->getBody())
         ) {
-            return [
-                'code'    => 400,
-                'message' => 'Bad Request'
-            ];
+            throw new MiException();
         }
 
-        if ($response->getStatusCode() === 404) {
-            return [
-                'code'    => 404,
-                'message' => 'Something went wrong'
-            ];
-        }
-
-        $timestamp     = '';
+        $timestamp = '';
         $responseArray = explode(':', $response->getBody());
         if (isset($responseArray) && count($responseArray)) {
             $timestamp = array_pop($responseArray);
         }
 
-        return [
-            'code'      => 200,
-            'message'   => $cuepoint->getText(),
-            'timestamp' => $timestamp
-        ];
+        return $timestamp;
     }
 }
