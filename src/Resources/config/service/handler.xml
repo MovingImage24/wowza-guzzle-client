@@ -21,6 +21,7 @@
                  parent="mi_wowza_guzzle_api">
             <argument type="service" id="mi_wowza_cuepoint_helper"/>
             <argument type="service" id="mi_wowza_cuepoint_model"/>
+            <argument type="service" id="mi_wowza_cuepoint_response_model"/>
         </service>
 
     </services>

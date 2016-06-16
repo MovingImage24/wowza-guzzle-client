@@ -32,38 +32,4 @@ class WowzaDvrHelper extends AbstractWowzaHelper
         '&recordingname=' . $dvr->getRecordingname() .
         '&action=' . $dvr->getAction();
     }
-
-    /**
-     * @param Response   $response
-     * @param WowzaModel $dvr
-     *
-     * @return array
-     */
-    public function parseResponse(Response $response, WowzaModel $dvr)
-    {
-        /**@var WowzaDvr $dvr */
-        if (preg_match('/Live stream .* does not exist/', $response->getBody())) {
-            return [
-                'code'    => 404,
-                'message' => $dvr->getStreamname() . ' does not exist'
-            ];
-        }
-
-        if ($response->getStatusCode() === 401) {
-            return [
-                'code'    => 401,
-                'message' => 'Bad credentials'
-            ];
-        }
-
-        $split = explode(' ', $response->getBody());
-
-        return [
-            'code'    => 200,
-            'message' => [
-                'action'        => $dvr->getAction() . '_dvr',
-                'recordingName' => array_pop($split)
-            ]
-        ];
-    }
 }

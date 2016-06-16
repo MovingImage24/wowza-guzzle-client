@@ -4,6 +4,7 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 
 use GuzzleHttp\Client;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaRecordingHelper;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\Recording\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Recording\WowzaRecording;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
@@ -20,6 +21,8 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
     /**@var WowzaRecordingHelper $recordingHelper */
     private $recordingHelper;
     private $recording;
+    /** @var  Response */
+    private $recordingResponse;
 
     /**
      * @param WowzaConfig          $wowzaConfig
@@ -36,8 +39,8 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
     {
         parent::__construct($wowzaConfig, $client);
 
-        $this->recordingHelper = $recordingHelper;
-        $this->recording       = $recording;
+        $this->recordingHelper   = $recordingHelper;
+        $this->recording         = $recording;
     }
 
     /**
@@ -67,10 +70,12 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
     }
 
     /**
-     * @param string $streamname
-     * @param string $option
+     * @param $streamname
+     * @param $option
      *
-     * @return JsonResponse
+     * @return bool
+     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiConnectException
+     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
      */
     private function recordingTask($streamname, $option)
     {
@@ -78,9 +83,8 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
         $this->recording->setOption($option);
 
         $url            = $this->recordingHelper->buildUrl('livestreamrecord', $this->wowzaConfig, $this->recording);
-        $result         = $this->recordingHelper->call($this->wowzaConfig, $url, $this->client);
-        $parsedResponse = $this->recordingHelper->parseResponse($result, $this->recording);
+        $this->recordingHelper->call($this->wowzaConfig, $url, $this->client);
 
-        return new JsonResponse($parsedResponse, $parsedResponse['code']);
+        return true;
     }
 }

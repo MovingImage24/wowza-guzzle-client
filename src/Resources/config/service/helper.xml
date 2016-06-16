@@ -17,6 +17,5 @@
                  class="Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaCuepointHelper">
         </service>
 
-
     </services>
 </container>

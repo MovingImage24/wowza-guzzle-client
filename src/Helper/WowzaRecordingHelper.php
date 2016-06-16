@@ -13,7 +13,6 @@ use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
 class WowzaRecordingHelper extends AbstractWowzaHelper
 {
 
-
     /**
      * @param string      $method
      * @param WowzaConfig $wowzaConfig
@@ -31,34 +30,5 @@ class WowzaRecordingHelper extends AbstractWowzaHelper
         '?app=' . $wowzaConfig->getWowzaApp() .
         '&streamname=' . $recording->getStreamname() .
         '&action=' . $recording->getAction();
-    }
-
-    /**
-     * @param Response   $response
-     * @param WowzaModel $recording
-     *
-     * @return array
-     */
-    public function parseResponse(Response $response, WowzaModel $recording)
-    {
-        /**@var WowzaRecording $recording */
-        if ($response->getStatusCode() === 400) {
-            return [
-                'code'    => 400,
-                'message' => 'Bad Request'
-            ];
-        }
-
-        if ($response->getStatusCode() === 404) {
-            return [
-                'code'    => 404,
-                'message' => 'Something went wrong'
-            ];
-        }
-
-        return [
-            'code'    => 200,
-            'message' => $recording->getAction()
-        ];
     }
 }

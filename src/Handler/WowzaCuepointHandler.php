@@ -4,6 +4,7 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 
 use GuzzleHttp\Client;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaCuepointHelper;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\WowzaCuepoint;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
@@ -21,24 +22,29 @@ class WowzaCuepointHandler extends WowzaApiClient implements CuepointHandler
     private $cuepointHelper;
     /**@var WowzaCuepoint $cuepoint */
     private $cuepoint;
+    /** @var Response  */
+    private $cuepointResponse;
 
     /**
      * @param WowzaConfig         $wowzaConfig
      * @param Client              $client
      * @param WowzaCuepointHelper $cuepointHelper
      * @param WowzaCuepoint       $cuepointModel
+     * @param Response            $cuepointResponse
      */
     public function __construct(
         WowzaConfig $wowzaConfig,
         Client $client,
         WowzaCuepointHelper $cuepointHelper,
-        WowzaCuepoint $cuepointModel
+        WowzaCuepoint $cuepointModel,
+        Response $cuepointResponse
     )
     {
         parent::__construct($wowzaConfig, $client);
 
-        $this->cuepointHelper = $cuepointHelper;
-        $this->cuepoint       = $cuepointModel;
+        $this->cuepointHelper   = $cuepointHelper;
+        $this->cuepoint         = $cuepointModel;
+        $this->cuepointResponse = $cuepointResponse;
     }
 
     /**
@@ -56,7 +62,8 @@ class WowzaCuepointHandler extends WowzaApiClient implements CuepointHandler
         $url            = $this->cuepointHelper->buildUrl('livesetmetadata', $this->wowzaConfig, $this->cuepoint);
         $result         = $this->cuepointHelper->call($this->wowzaConfig, $url, $this->client);
         $parsedResponse = $this->cuepointHelper->parseResponse($result, $this->cuepoint);
+        $this->cuepointResponse->setTimestamp($parsedResponse);
 
-        return new JsonResponse($parsedResponse, $parsedResponse['code']);
+        return $this->cuepointResponse;
     }
 }

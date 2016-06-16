@@ -4,6 +4,7 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 
 use GuzzleHttp\Client;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaDvrHelper;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\Dvr\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Dvr\WowzaDvr;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
@@ -29,12 +30,17 @@ class WowzaDvrHandler extends WowzaApiClient implements DvrHandler
      * @param Client         $client
      * @param WowzaDvrHelper $dvrHelper
      */
-    public function __construct(WowzaConfig $wowzaConfig, Client $client, WowzaDvrHelper $dvrHelper, WowzaDvr $dvr)
+    public function __construct(
+        WowzaConfig $wowzaConfig,
+        Client $client,
+        WowzaDvrHelper $dvrHelper,
+        WowzaDvr $dvr
+    )
     {
         parent::__construct($wowzaConfig, $client);
 
-        $this->dvrHelper = $dvrHelper;
-        $this->dvr       = $dvr;
+        $this->dvrHelper   = $dvrHelper;
+        $this->dvr         = $dvr;
     }
 
     /**
@@ -74,10 +80,9 @@ class WowzaDvrHandler extends WowzaApiClient implements DvrHandler
         $this->dvr->setStreamname($streamname);
         $this->dvr->setRecordingname($recordingname);
 
-        $url            = $this->dvrHelper->buildUrl('dvrstreamrecord', $this->wowzaConfig, $this->dvr);
-        $result         = $this->dvrHelper->call($this->wowzaConfig, $url, $this->client);
-        $parsedResponse = $this->dvrHelper->parseResponse($result, $this->dvr);
+        $url = $this->dvrHelper->buildUrl('dvrstreamrecord', $this->wowzaConfig, $this->dvr);
+        $this->dvrHelper->call($this->wowzaConfig, $url, $this->client);
 
-        return new JsonResponse($parsedResponse, $parsedResponse['code']);
+        return true;
     }
 }
