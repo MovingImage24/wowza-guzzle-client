@@ -9,14 +9,12 @@
                  parent="mi_wowza_guzzle_api">
             <argument type="service" id="mi_wowza_dvr_helper"/>
             <argument type="service" id="mi_wowza_dvr_model"/>
-            <argument type="service" id="mi_wowza_dvr_response_model"/>
         </service>
 
         <service id="mi_wowza_recording_handler" class="Mi\Bundle\WowzaGuzzleClientBundle\Handler\WowzaRecordingHandler"
                  parent="mi_wowza_guzzle_api">
             <argument type="service" id="mi_wowza_recording_helper"/>
             <argument type="service" id="mi_wowza_recording_model"/>
-            <argument type="service" id="mi_wowza_recording_response_model"/>
         </service>
 
         <service id="mi_wowza_cuepoint_handler" class="Mi\Bundle\WowzaGuzzleClientBundle\Handler\WowzaCuepointHandler"
