@@ -24,8 +24,5 @@
         <service id="mi_wowza_dvr_response_model" class="Mi\Bundle\WowzaGuzzleClientBundle\Model\Dvr\Response">
         </service>
 
-        <service id="mi_wowza_recording_response_model" class="Mi\Bundle\WowzaGuzzleClientBundle\Model\Recording\Response">
-        </service>
-
     </services>
 </container>

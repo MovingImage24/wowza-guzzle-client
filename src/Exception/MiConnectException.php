@@ -8,5 +8,8 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Exception;
  */
 class MiConnectException extends MiException
 {
-
+    public function __construct($message)
+    {
+        parent::__construct($message);
+    }
 }

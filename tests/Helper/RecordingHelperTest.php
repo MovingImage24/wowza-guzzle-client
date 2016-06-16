@@ -47,16 +47,4 @@ class RecordingHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $result);
     }
-
-    /**
-     * @test
-     */
-    public function parseResponseTest()
-    {
-        $recording = new WowzaRecording();
-        $recording->setAction('startRecording');
-        $response = new Response(200, ['foo' => 'bar']);
-        $result   = $this->obj->parseResponse($response, $recording);
-        $this->assertEquals(true, $result);
-    }
 }

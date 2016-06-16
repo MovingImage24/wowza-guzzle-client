@@ -111,14 +111,4 @@ class DvrHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $result);
     }
-
-    /**
-     * @test
-     */
-    public function parseResponse()
-    {
-        $response = new Response(200, ['foo' => 'bar'], 'stream foo started as b');
-        $result   = $this->obj->parseResponse($response);
-        $this->assertEquals('b', $result);
-    }
 }

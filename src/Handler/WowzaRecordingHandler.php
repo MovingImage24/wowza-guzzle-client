@@ -73,10 +73,12 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
     }
 
     /**
-     * @param string $streamname
-     * @param string $option
+     * @param $streamname
+     * @param $option
      *
-     * @return Response
+     * @return bool
+     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiConnectException
+     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
      */
     private function recordingTask($streamname, $option)
     {
@@ -84,9 +86,8 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
         $this->recording->setOption($option);
 
         $url            = $this->recordingHelper->buildUrl('livestreamrecord', $this->wowzaConfig, $this->recording);
-        $result         = $this->recordingHelper->call($this->wowzaConfig, $url, $this->client);
-        $parsedResponse = $this->recordingHelper->parseResponse($result);
-        $this->recordingResponse->setSuccess($parsedResponse);
-        return $this->recordingResponse;
+        $this->recordingHelper->call($this->wowzaConfig, $url, $this->client);
+
+        return true;
     }
 }

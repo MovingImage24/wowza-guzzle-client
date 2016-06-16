@@ -85,11 +85,9 @@ class WowzaDvrHandler extends WowzaApiClient implements DvrHandler
         $this->dvr->setStreamname($streamname);
         $this->dvr->setRecordingname($recordingname);
 
-        $url            = $this->dvrHelper->buildUrl('dvrstreamrecord', $this->wowzaConfig, $this->dvr);
-        $result         = $this->dvrHelper->call($this->wowzaConfig, $url, $this->client);
-        $parsedResponse = $this->dvrHelper->parseResponse($result, $this->dvr);
-        $this->dvrResponse->setRecordingName($parsedResponse);
+        $url = $this->dvrHelper->buildUrl('dvrstreamrecord', $this->wowzaConfig, $this->dvr);
+        $this->dvrHelper->call($this->wowzaConfig, $url, $this->client);
 
-        return $this->dvrResponse;
+        return true;
     }
 }

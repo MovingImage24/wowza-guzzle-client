@@ -36,7 +36,7 @@ abstract class AbstractWowzaHelper
             );
         } catch (\Exception $e) {
             if ($e instanceof ConnectException) {
-                throw new MiConnectException();
+                throw new MiConnectException($e->getMessage());
             }
 
             throw new MiException();
@@ -53,11 +53,4 @@ abstract class AbstractWowzaHelper
      * @return string
      */
     abstract function buildUrl($method, WowzaConfig $wowzaConfig, WowzaModel $cuepoint);
-
-    /**
-     * @param Response   $response
-     *
-     * @return array
-     */
-    abstract function parseResponse(Response $response);
 }

@@ -32,16 +32,4 @@ class WowzaDvrHelper extends AbstractWowzaHelper
         '&recordingname=' . $dvr->getRecordingname() .
         '&action=' . $dvr->getAction();
     }
-
-    /**
-     * @param Response   $response
-     *
-     * @return array
-     */
-    public function parseResponse(Response $response)
-    {
-        $split = explode(' ', $response->getBody());
-
-        return array_pop($split);
-    }
 }

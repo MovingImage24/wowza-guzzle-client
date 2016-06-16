@@ -8,4 +8,8 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Exception;
  */
 class MiException extends \Exception
 {
+    public function __construct($message = 'Something went wrong!')
+    {
+        parent::__construct($message);
+    }
 }
