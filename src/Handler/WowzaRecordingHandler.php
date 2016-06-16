@@ -29,21 +29,18 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
      * @param Client               $client
      * @param WowzaRecordingHelper $recordingHelper
      * @param WowzaRecording       $recording
-     * @param Response       $recordingResponse
      */
     public function __construct(
         WowzaConfig $wowzaConfig,
         Client $client,
         WowzaRecordingHelper $recordingHelper,
-        WowzaRecording $recording,
-        Response $recordingResponse
+        WowzaRecording $recording
     )
     {
         parent::__construct($wowzaConfig, $client);
 
         $this->recordingHelper   = $recordingHelper;
         $this->recording         = $recording;
-        $this->recordingResponse = $recordingResponse;
     }
 
     /**

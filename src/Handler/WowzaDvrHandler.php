@@ -22,8 +22,6 @@ class WowzaDvrHandler extends WowzaApiClient implements DvrHandler
     private $dvrHelper;
     /**@var WowzaDvr $dvr */
     private $dvr;
-    /** @var  Response */
-    private $dvrResponse;
 
     /**
      * DvrHandler constructor.
@@ -31,21 +29,18 @@ class WowzaDvrHandler extends WowzaApiClient implements DvrHandler
      * @param WowzaConfig    $wowzaConfig
      * @param Client         $client
      * @param WowzaDvrHelper $dvrHelper
-     * @param Response       $dvrResponse
      */
     public function __construct(
         WowzaConfig $wowzaConfig,
         Client $client,
         WowzaDvrHelper $dvrHelper,
-        WowzaDvr $dvr,
-        Response $dvrResponse
+        WowzaDvr $dvr
     )
     {
         parent::__construct($wowzaConfig, $client);
 
         $this->dvrHelper   = $dvrHelper;
         $this->dvr         = $dvr;
-        $this->dvrResponse = $dvrResponse;
     }
 
     /**
