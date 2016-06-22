@@ -22,16 +22,11 @@ class RecordingHelperTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->obj = new WowzaRecordingHelper();
-        $data     = [
-            'wowza_protocol' => 'http',
-            'wowza_hostname' => 'host',
-            'wowza_dvr_port'  => '123',
-            'wowza_app'      => 'app',
-            'wowza_admin'         => 'foo',
-            'wowza_admin_password' => 'bar'
-
-        ];
-        $this->wowzaConfig = new WowzaConfig($data);
+        $this->wowzaConfig = new WowzaConfig();
+        $this->wowzaConfig->setApiUrl('http://host:123');
+        $this->wowzaConfig->setApp('app');
+        $this->wowzaConfig->setUsername('foo');
+        $this->wowzaConfig->setPassword('bar');
     }
 
     /**

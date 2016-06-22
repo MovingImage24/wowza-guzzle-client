@@ -3,6 +3,7 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle;
 
 use GuzzleHttp\Client;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 
 /**
@@ -18,12 +19,26 @@ class WowzaApiClient
     /**
      * WowzaApiClient constructor.
      *
-     * @param WowzaConfig $wowzaConfig
      * @param Client      $client
      */
-    public function __construct(WowzaConfig $wowzaConfig, Client $client)
+    public function __construct(Client $client)
     {
-        $this->wowzaConfig        = $wowzaConfig;
         $this->client             = $client;
+    }
+
+    /**
+     * @return Config
+     */
+    public function getWowzaConfig()
+    {
+        return $this->wowzaConfig;
+    }
+
+    /**
+     * @param Config $wowzaConfig
+     */
+    public function setWowzaConfig($wowzaConfig)
+    {
+        $this->wowzaConfig = $wowzaConfig;
     }
 }

@@ -4,12 +4,10 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 
 use GuzzleHttp\Client;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaDvrHelper;
-use Mi\Bundle\WowzaGuzzleClientBundle\Model\Dvr\Response;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Dvr\WowzaDvr;
-use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
@@ -26,28 +24,24 @@ class WowzaDvrHandler extends WowzaApiClient implements DvrHandler
     /**
      * DvrHandler constructor.
      *
-     * @param WowzaConfig    $wowzaConfig
      * @param Client         $client
      * @param WowzaDvrHelper $dvrHelper
+     * @param WowzaDvr       $dvr
      */
     public function __construct(
-        WowzaConfig $wowzaConfig,
         Client $client,
         WowzaDvrHelper $dvrHelper,
         WowzaDvr $dvr
     )
     {
-        parent::__construct($wowzaConfig, $client);
+        parent::__construct($client);
 
-        $this->dvrHelper   = $dvrHelper;
-        $this->dvr         = $dvr;
+        $this->dvrHelper = $dvrHelper;
+        $this->dvr       = $dvr;
     }
 
     /**
-     * @param string $streamname
-     * @param string $recordingname
-     *
-     * @return JsonResponse
+     * @inheritDoc
      */
     public function startDvr($streamname, $recordingname)
     {
@@ -57,16 +51,29 @@ class WowzaDvrHandler extends WowzaApiClient implements DvrHandler
     }
 
     /**
-     * @param string $streamname
-     * @param string $recordingname
-     *
-     * @return JsonResponse
+     * @inheritDoc
      */
     public function stopDvr($streamname, $recordingname)
     {
         $this->dvr->setAction('stop');
 
         return $this->dvrTask($streamname, $recordingname);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getConfig()
+    {
+        parent::getWowzaConfig();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setConfig($config)
+    {
+        parent::setWowzaConfig($config);
     }
 
     /**

@@ -4,7 +4,7 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper;
 
 use GuzzleHttp\Psr7\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException;
-use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\WowzaCuepoint;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
 
@@ -15,28 +15,26 @@ class WowzaCuepointHelper extends AbstractWowzaHelper
 {
     /**
      * @param string      $method
-     * @param WowzaConfig $wowzaConfig
+     * @param Config $wowzaConfig
      * @param WowzaModel  $cuepoint
      *
      * @return string
      */
-    public function buildUrl($method, WowzaConfig $wowzaConfig, WowzaModel $cuepoint)
+    public function buildUrl($method, Config $wowzaConfig, WowzaModel $cuepoint)
     {
+        //TODO: Watt is, wenn die ApiUrl anders als erwartet eingetragen wurde
         /**@var WowzaCuepoint $cuepoint */
-        return $wowzaConfig->getWowzaProtocol() . '://' .
-        $wowzaConfig->getWowzaHostname() . ':' .
-        $wowzaConfig->getWowzaDvrPort() .
+        return $wowzaConfig->getApiUrl() .
         '/' . $method .
-        '?app=' . $wowzaConfig->getWowzaApp() .
+        '?app=' . $wowzaConfig->getApp() .
         '&streamname=' . $cuepoint->getStreamname() .
         '&text=' . urlencode($cuepoint->getText());
     }
 
-
     /**
      * @param Response   $response
      *
-     * @return array
+     * @return int
      * @throws MiException
      */
     public function parseResponse(Response $response)

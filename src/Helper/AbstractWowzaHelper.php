@@ -5,9 +5,8 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiConnectException;
-use GuzzleHttp\Psr7\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException;
-use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
 
 /**
@@ -16,7 +15,7 @@ use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
 abstract class AbstractWowzaHelper
 {
     /**
-     * @param WowzaConfig $wowzaConfig
+     * @param Config $wowzaConfig
      * @param string      $url
      * @param Client      $client
      *
@@ -24,14 +23,14 @@ abstract class AbstractWowzaHelper
      * @throws MiConnectException
      * @throws MiException
      */
-    public function call(WowzaConfig $wowzaConfig, $url, Client $client)
+    public function call(Config $wowzaConfig, $url, Client $client)
     {
         try {
             $result = $client->request(
                 'GET',
                 $url,
                 [
-                    'auth' => [$wowzaConfig->getWowzaAdmin(), $wowzaConfig->getWowzaAdminPassword(), 'Digest']
+                    'auth' => [$wowzaConfig->getUsername(), $wowzaConfig->getPassword(), 'Digest']
                 ]
             );
         } catch (\Exception $e) {
@@ -47,10 +46,10 @@ abstract class AbstractWowzaHelper
 
     /**
      * @param string      $method
-     * @param WowzaConfig $wowzaConfig
+     * @param Config $wowzaConfig
      * @param WowzaModel  $cuepoint
      *
      * @return string
      */
-    abstract function buildUrl($method, WowzaConfig $wowzaConfig, WowzaModel $cuepoint);
+    abstract function buildUrl($method, Config $wowzaConfig, WowzaModel $cuepoint);
 }

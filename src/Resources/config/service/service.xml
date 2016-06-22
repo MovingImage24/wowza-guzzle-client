@@ -13,7 +13,6 @@
     <services>
 
         <service id="mi_wowza_guzzle_api" class="Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient">
-            <argument type="service" id="mi_wowza_config_model"/>
             <argument type="service" id="guzzle_client_wowza"/>
         </service>
 
