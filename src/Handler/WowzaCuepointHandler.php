@@ -10,7 +10,6 @@ use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\WowzaCuepoint;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
  *
@@ -26,21 +25,19 @@ class WowzaCuepointHandler extends WowzaApiClient implements CuepointHandler
     private $cuepointResponse;
 
     /**
-     * @param WowzaConfig         $wowzaConfig
      * @param Client              $client
      * @param WowzaCuepointHelper $cuepointHelper
      * @param WowzaCuepoint       $cuepointModel
      * @param Response            $cuepointResponse
      */
     public function __construct(
-        WowzaConfig $wowzaConfig,
         Client $client,
         WowzaCuepointHelper $cuepointHelper,
         WowzaCuepoint $cuepointModel,
         Response $cuepointResponse
     )
     {
-        parent::__construct($wowzaConfig, $client);
+        parent::__construct($client);
 
         $this->cuepointHelper   = $cuepointHelper;
         $this->cuepoint         = $cuepointModel;
@@ -48,10 +45,7 @@ class WowzaCuepointHandler extends WowzaApiClient implements CuepointHandler
     }
 
     /**
-     * @param string $streamname
-     * @param string $text
-     *
-     * @return JsonResponse
+     * @inheritDoc
      */
     public function insertCuepoint($streamname, $text)
     {
@@ -61,9 +55,25 @@ class WowzaCuepointHandler extends WowzaApiClient implements CuepointHandler
 
         $url            = $this->cuepointHelper->buildUrl('livesetmetadata', $this->wowzaConfig, $this->cuepoint);
         $result         = $this->cuepointHelper->call($this->wowzaConfig, $url, $this->client);
-        $parsedResponse = $this->cuepointHelper->parseResponse($result, $this->cuepoint);
+        $parsedResponse = $this->cuepointHelper->parseResponse($result);
         $this->cuepointResponse->setTimestamp($parsedResponse);
 
         return $this->cuepointResponse;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getConfig()
+    {
+        parent::getWowzaConfig();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setConfig($config)
+    {
+        parent::setWowzaConfig($config);
     }
 }

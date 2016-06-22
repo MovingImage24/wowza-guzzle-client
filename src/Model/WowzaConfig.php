@@ -5,76 +5,98 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Model;
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
  */
-final class WowzaConfig
+final class WowzaConfig implements Config
 {
-    private $wowzaProtocol;
-    private $wowzaHostname;
-    private $wowzaDvrPort;
-    private $wowzaAdmin;
-    private $wowzaAdminPassword;
-    private $wowzaApp;
+    /** @var  string */
+    private $username;
+    /** @var  string */
+    private $password;
+    /** @var  string */
+    private $app;
+    /** @var  string */
+    private $apiUrl;
+    /** @var  string */
+    private $playoutUrl;
 
     /**
-     * WowzaConfig constructor.
-     *
-     * @param array $wowzaConfig
+     * @inheritDoc
      */
-    public function __construct(array $wowzaConfig)
+    public function getUsername()
     {
-        $this->wowzaProtocol      = $wowzaConfig['wowza_protocol'];
-        $this->wowzaHostname      = $wowzaConfig['wowza_hostname'];
-        $this->wowzaDvrPort       = $wowzaConfig['wowza_dvr_port'];
-        $this->wowzaAdmin         = $wowzaConfig['wowza_admin'];
-        $this->wowzaAdminPassword = $wowzaConfig['wowza_admin_password'];
-        $this->wowzaApp           = $wowzaConfig['wowza_app'];
+        return $this->username;
     }
 
     /**
-     * @return mixed
+     * @inheritDoc
      */
-    public function getWowzaProtocol()
+    public function setUsername($username)
     {
-        return $this->wowzaProtocol;
+        $this->username = $username;
     }
 
     /**
-     * @return mixed
+     * @inheritDoc
      */
-    public function getWowzaHostname()
+    public function getPassword()
     {
-        return $this->wowzaHostname;
+        return $this->password;
     }
 
     /**
-     * @return mixed
+     * @inheritDoc
      */
-    public function getWowzaDvrPort()
+    public function setPassword($password)
     {
-        return $this->wowzaDvrPort;
+        $this->password = $password;
     }
 
     /**
-     * @return mixed
+     * @inheritDoc
      */
-    public function getWowzaAdmin()
+    public function getApp()
     {
-        return $this->wowzaAdmin;
+        return $this->app;
     }
 
     /**
-     * @return mixed
+     * @inheritDoc
      */
-    public function getWowzaAdminPassword()
+    public function setApp($app)
     {
-        return $this->wowzaAdminPassword;
+        $this->app = $app;
     }
 
     /**
-     * @return mixed
+     * @inheritDoc
      */
-    public function getWowzaApp()
+    public function getApiUrl()
     {
-        return $this->wowzaApp;
+        return $this->apiUrl;
     }
-    
+
+    /**
+     * @inheritDoc
+     */
+    public function setApiUrl($apiUrl)
+    {
+        $this->apiUrl = $apiUrl;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPlayoutUrl()
+    {
+        return $this->playoutUrl;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setPlayoutUrl($playoutUrl)
+    {
+        $this->playoutUrl = $playoutUrl;
+    }
+
+
 }

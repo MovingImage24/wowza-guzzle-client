@@ -2,9 +2,8 @@
 
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper;
 
-use GuzzleHttp\Psr7\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Recording\WowzaRecording;
-use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
 
 /**
@@ -15,19 +14,18 @@ class WowzaRecordingHelper extends AbstractWowzaHelper
 
     /**
      * @param string      $method
-     * @param WowzaConfig $wowzaConfig
+     * @param Config $wowzaConfig
      * @param WowzaModel  $recording
      *
      * @return string
      */
-    public function buildUrl($method, WowzaConfig $wowzaConfig, WowzaModel $recording)
+    public function buildUrl($method, Config $wowzaConfig, WowzaModel $recording)
     {
+        //TODO: Watt is, wenn die ApiUrl anders als erwartet eingetragen wurde
         /**@var WowzaRecording $recording */
-        return $wowzaConfig->getWowzaProtocol() . '://' .
-        $wowzaConfig->getWowzaHostname() . ':' .
-        $wowzaConfig->getWowzaDvrPort() .
+        return $wowzaConfig->getApiUrl() .
         '/' . $method .
-        '?app=' . $wowzaConfig->getWowzaApp() .
+        '?app=' . $wowzaConfig->getApp() .
         '&streamname=' . $recording->getStreamname() .
         '&action=' . $recording->getAction();
     }
