@@ -3,9 +3,9 @@
 
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper\Tests;
 
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Psr7\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaDvrHelper;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Dvr\WowzaDvr;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
@@ -36,17 +36,21 @@ class DvrHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function call()
     {
+        /** @var Client $guzzleClient */
         $guzzleClient = $this->prophesize('\GuzzleHttp\Client');
-        $guzzleClient->request(
+        $guzzleRequest = $this->prophesize('\GuzzleHttp\Message\Request');
+        $guzzleClient->createRequest(
             'GET',
             'url',
             [
                 'auth' => ['foo', 'bar', 'Digest']
             ]
-        )->shouldBeCalled('1')->willReturn('foo');
+        )->shouldBeCalledTimes('1')->willReturn($guzzleRequest);
+
+        $guzzleClient->send($guzzleRequest)->shouldBeCalledTimes('1')->willReturn('bar');
 
         $result = $this->obj->call($this->wowzaConfig, 'url', $guzzleClient->reveal());
-        $this->assertEquals('foo', $result);
+        $this->assertEquals('bar', $result);
     }
 
     /**
@@ -56,19 +60,26 @@ class DvrHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function callMiException()
     {
-        $response = new Response(404, ['foo' => 'bar'], 'Something went wrong');
-        $request = $this->prophesize('\GuzzleHttp\Psr7\Request');
+        $guzzleResponse = $this->prophesize('\GuzzleHttp\Message\Response');
+        $guzzleRequest = $this->prophesize('\GuzzleHttp\Message\Request');
+
+        /** @var Client $guzzleClient */
         $guzzleClient = $this->prophesize('\GuzzleHttp\Client');
-        $guzzleClient->request(
+        $guzzleClient->createRequest(
             'GET',
             'url',
             [
                 'auth' => ['foo', 'bar', 'Digest']
             ]
-        )->shouldBeCalled('1')->willThrow(new ClientException('exception', $request->reveal(), $response));
+        )->shouldBeCalledTimes('1')->willReturn($guzzleRequest);
+
+        $guzzleClient
+            ->send($guzzleRequest)
+            ->shouldBeCalledTimes('1')
+            ->willThrow(new ClientException('exception', $guzzleRequest->reveal(), $guzzleResponse->reveal()));
 
         $result = $this->obj->call($this->wowzaConfig, 'url', $guzzleClient->reveal());
-        $this->assertEquals($response->getStatusCode(), $result->getStatusCode());
+        $this->assertEquals($guzzleResponse->getStatusCode(), $result->getStatusCode());
     }
 
     /**
@@ -78,18 +89,25 @@ class DvrHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function callMiConnectException()
     {
-        $response = new Response(400, ['foo' => 'bar'], 'baz');
-        $request = $this->prophesize('\GuzzleHttp\Psr7\Request');
+        $guzzleResponse = $this->prophesize('\GuzzleHttp\Message\Response');
+        $guzzleRequest = $this->prophesize('\GuzzleHttp\Message\Request');
+
         $guzzleClient = $this->prophesize('\GuzzleHttp\Client');
-        $guzzleClient->request(
+        $guzzleClient->createRequest(
             'GET',
             'url',
             [
                 'auth' => ['foo', 'bar', 'Digest']
             ]
-        )->shouldBeCalled('1')->willThrow(new ConnectException('exception', $request->reveal()));
+        )->shouldBeCalledTimes('1')->willReturn($guzzleRequest);
+
+        $guzzleClient
+            ->send($guzzleRequest)
+            ->shouldBeCalled('1')
+            ->willThrow(new ConnectException('exception', $guzzleRequest->reveal()));
+
         $result = $this->obj->call($this->wowzaConfig, 'url', $guzzleClient->reveal());
-        $this->assertEquals($response->getStatusCode(), $result->getStatusCode());
+        $this->assertEquals($guzzleResponse->getStatusCode(), $result->getStatusCode());
     }
 
     /**

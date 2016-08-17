@@ -14,9 +14,9 @@ use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
 class WowzaCuepointHelper extends AbstractWowzaHelper
 {
     /**
-     * @param string      $method
-     * @param Config $wowzaConfig
-     * @param WowzaModel  $cuepoint
+     * @param string     $method
+     * @param Config     $wowzaConfig
+     * @param WowzaModel $cuepoint
      *
      * @return string
      */
@@ -32,7 +32,7 @@ class WowzaCuepointHelper extends AbstractWowzaHelper
     }
 
     /**
-     * @param Response   $response
+     * @param Response $response
      *
      * @return int
      * @throws MiException

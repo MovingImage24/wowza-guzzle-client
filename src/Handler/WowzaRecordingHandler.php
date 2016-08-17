@@ -6,7 +6,6 @@ use GuzzleHttp\Client;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaRecordingHelper;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Recording\WowzaRecording;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>

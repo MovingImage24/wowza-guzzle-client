@@ -12,9 +12,9 @@ use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
 class WowzaDvrHelper extends AbstractWowzaHelper
 {
     /**
-     * @param string      $method
-     * @param Config $wowzaConfig
-     * @param WowzaModel  $dvr
+     * @param string     $method
+     * @param Config     $wowzaConfig
+     * @param WowzaModel $dvr
      *
      * @return string
      */
