@@ -16,8 +16,8 @@ abstract class AbstractWowzaHelper
 {
     /**
      * @param Config $wowzaConfig
-     * @param string      $url
-     * @param Client      $client
+     * @param string $url
+     * @param Client $client
      *
      * @return mixed|\Psr\Http\Message\ResponseInterface
      * @throws MiConnectException
@@ -26,13 +26,15 @@ abstract class AbstractWowzaHelper
     public function call(Config $wowzaConfig, $url, Client $client)
     {
         try {
-            $result = $client->request(
+            $request = $client->createRequest(
                 'GET',
                 $url,
                 [
                     'auth' => [$wowzaConfig->getUsername(), $wowzaConfig->getPassword(), 'Digest']
                 ]
             );
+
+            $result = $client->send($request);
         } catch (\Exception $e) {
             if ($e instanceof ConnectException) {
                 throw new MiConnectException($e->getMessage());
@@ -45,9 +47,9 @@ abstract class AbstractWowzaHelper
     }
 
     /**
-     * @param string      $method
-     * @param Config $wowzaConfig
-     * @param WowzaModel  $cuepoint
+     * @param string     $method
+     * @param Config     $wowzaConfig
+     * @param WowzaModel $cuepoint
      *
      * @return string
      */

@@ -51,8 +51,7 @@ class CuepointHelperTest extends \PHPUnit_Framework_TestCase
     {
         $response = new Response(200, ['foo' => 'bar'], 'Timestamp: 123');
         $result = $this->obj->parseResponse($response);
-        $this->assertEquals('123', $result
-        );
+        $this->assertEquals('123', $result);
     }
 
     /**

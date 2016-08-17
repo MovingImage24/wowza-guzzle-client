@@ -4,7 +4,6 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle;
 
 use GuzzleHttp\Client;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
-use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
@@ -23,7 +22,7 @@ class WowzaApiClient
      */
     public function __construct(Client $client)
     {
-        $this->client             = $client;
+        $this->client = $client;
     }
 
     /**
