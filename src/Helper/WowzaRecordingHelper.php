@@ -13,9 +13,9 @@ class WowzaRecordingHelper extends AbstractWowzaHelper
 {
 
     /**
-     * @param string      $method
-     * @param Config $wowzaConfig
-     * @param WowzaModel  $recording
+     * @param string     $method
+     * @param Config     $wowzaConfig
+     * @param WowzaModel $recording
      *
      * @return string
      */

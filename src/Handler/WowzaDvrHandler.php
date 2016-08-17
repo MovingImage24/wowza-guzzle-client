@@ -4,10 +4,8 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 
 use GuzzleHttp\Client;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaDvrHelper;
-use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Dvr\WowzaDvr;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
@@ -80,7 +78,7 @@ class WowzaDvrHandler extends WowzaApiClient implements DvrHandler
      * @param string $streamname
      * @param string $recordingname
      *
-     * @return JsonResponse
+     * @return bool
      */
     private function dvrTask($streamname, $recordingname)
     {

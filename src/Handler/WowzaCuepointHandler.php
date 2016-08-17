@@ -5,10 +5,8 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 use GuzzleHttp\Client;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaCuepointHelper;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\Response;
-use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\WowzaCuepoint;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
