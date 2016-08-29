@@ -3,7 +3,8 @@
 
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper\Tests;
 
-use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Message\Response;
+use GuzzleHttp\Stream\Stream;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaCuepointHelper;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\WowzaCuepoint;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
@@ -49,7 +50,7 @@ class CuepointHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function parseValidResponse()
     {
-        $response = new Response(200, ['foo' => 'bar'], 'Timestamp: 123');
+        $response = new Response(200, ['foo' => 'bar'], Stream::factory('Timestamp: 123'));
         $result = $this->obj->parseResponse($response);
         $this->assertEquals('123', $result);
     }
@@ -63,7 +64,7 @@ class CuepointHelperTest extends \PHPUnit_Framework_TestCase
     {
         $cuepoint = new WowzaCuepoint();
         $cuepoint->setText('cuepointfoo');
-        $response = new Response('200', ['foo' => 'bar'], 'foobar is required');
+        $response = new Response('200', ['foo' => 'bar'], Stream::factory('foobar is required'));
         $this->obj->parseResponse($response, $cuepoint);
     }
 
@@ -76,7 +77,7 @@ class CuepointHelperTest extends \PHPUnit_Framework_TestCase
     {
         $cuepoint = new WowzaCuepoint();
         $cuepoint->setText('cuepointfoo');
-        $response = new Response('200', ['foo' => 'bar'], 'foobar not found');
+        $response = new Response('200', ['foo' => 'bar'], Stream::factory('foobar not found'));
         $result = $this->obj->parseResponse($response, $cuepoint);
         $this->assertEquals(
             [
