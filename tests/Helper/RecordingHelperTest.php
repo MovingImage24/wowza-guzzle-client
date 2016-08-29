@@ -3,7 +3,6 @@
 
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper\Tests;
 
-use GuzzleHttp\Psr7\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaRecordingHelper;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Recording\WowzaRecording;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
