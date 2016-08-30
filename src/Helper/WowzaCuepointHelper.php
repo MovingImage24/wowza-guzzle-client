@@ -2,7 +2,7 @@
 
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper;
 
-use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Message\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\WowzaCuepoint;
