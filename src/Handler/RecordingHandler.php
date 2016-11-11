@@ -14,19 +14,21 @@ interface RecordingHandler
 {
     /**
      * @param string $streamname
+     * @param string $suffix
      * @param string $option
      *
      * @return JsonResponse
      */
-    public function startRecording($streamname, $option = 'append');
+    public function startRecording($streamname, $suffix = '', $option = 'append');
 
     /**
      * @param string $streamname
+     * @param string $suffix
      * @param string $option
      *
      * @return JsonResponse
      */
-    public function stopRecording($streamname, $option = 'append');
+    public function stopRecording($streamname, $suffix = '', $option = 'append');
 
     /**
      * @return Config
