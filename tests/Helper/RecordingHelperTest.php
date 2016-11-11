@@ -36,8 +36,8 @@ class RecordingHelperTest extends \PHPUnit_Framework_TestCase
         $recording = new WowzaRecording();
         $recording->setAction('startRecording');
         $recording->setStreamname('stream');
-        $result   = $this->obj->buildUrl('foo', $this->wowzaConfig, $recording);
-        $expected = 'http://host:123/foo?app=app&streamname=stream&action=startRecording';
+        $result   = $this->obj->buildUrl('foo', $this->wowzaConfig, $recording, 'foobar');
+        $expected = 'http://host:123/foo?app=app&streamname=stream&action=startRecording&fileTemplate=foobar_${SourceStreamName}';
 
         $this->assertEquals($expected, $result);
     }

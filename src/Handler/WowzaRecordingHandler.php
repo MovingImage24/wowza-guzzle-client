@@ -38,21 +38,21 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
     /**
      * @inheritDoc
      */
-    public function startRecording($streamname, $option = 'append')
+    public function startRecording($streamname, $suffix = '', $option = 'append')
     {
         $this->recording->setAction('startRecording');
 
-        return $this->recordingTask($streamname, $option);
+        return $this->recordingTask($streamname, $option, $suffix);
     }
 
     /**
      * @inheritDoc
      */
-    public function stopRecording($streamname, $option = 'append')
+    public function stopRecording($streamname, $suffix = '', $option = 'append')
     {
         $this->recording->setAction('stopRecording');
 
-        return $this->recordingTask($streamname, $option);
+        return $this->recordingTask($streamname, $option, $suffix);
     }
 
     /**
@@ -72,19 +72,20 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
     }
 
     /**
-     * @param $streamname
-     * @param $option
+     * @param string $streamname
+     * @param string $option
+     * @param string $suffix
      *
      * @return bool
      * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiConnectException
      * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
      */
-    private function recordingTask($streamname, $option)
+    private function recordingTask($streamname, $option, $suffix = '')
     {
         $this->recording->setStreamname($streamname);
         $this->recording->setOption($option);
 
-        $url = $this->recordingHelper->buildUrl('livestreamrecord', $this->wowzaConfig, $this->recording);
+        $url = $this->recordingHelper->buildUrl('livestreamrecord', $this->wowzaConfig, $this->recording, $suffix);
         $this->recordingHelper->call($this->wowzaConfig, $url, $this->client);
 
         return true;
