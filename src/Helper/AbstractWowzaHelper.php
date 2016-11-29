@@ -7,7 +7,9 @@ use GuzzleHttp\Exception\ConnectException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiConnectException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
+use Mi\WebcastManager\StreamingServer\Model\StreamingServer;
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
@@ -47,11 +49,12 @@ abstract class AbstractWowzaHelper
     }
 
     /**
-     * @param string     $method
-     * @param Config     $wowzaConfig
+     * @param string $method
+     * @param WowzaConfig|StreamingServer $wowzaConfig
      * @param WowzaModel $cuepoint
      *
+     * @param $prefix
      * @return string
      */
-    abstract function buildUrl($method, Config $wowzaConfig, WowzaModel $cuepoint);
+    abstract function buildUrl($method, $wowzaConfig, WowzaModel $cuepoint, $prefix);
 }

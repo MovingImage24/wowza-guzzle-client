@@ -12,6 +12,10 @@ use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
  */
 class WowzaApiClient
 {
+    const OPTION_VERSION = 'version';
+    const OPTION_APPEND = 'append';
+    const OPTION_OVERWRITE = 'overwrite';
+
     protected $wowzaConfig;
     protected $client;
 
