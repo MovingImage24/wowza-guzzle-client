@@ -3,7 +3,6 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper;
 
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Recording\WowzaRecording;
-use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
 
 /**
@@ -11,24 +10,18 @@ use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
  */
 class WowzaRecordingHelper extends AbstractWowzaHelper
 {
-
     /**
-     * @param string     $method
-     * @param Config     $wowzaConfig
-     * @param WowzaModel $recording
-     * @param string     $suffix
-     *
-     * @return string
+     * @inheritdoc
      */
-    public function buildUrl($method, Config $wowzaConfig, WowzaModel $recording, $suffix = '')
+    public function buildUrl($method, $wowzaConfig, WowzaModel $recording, $prefix)
     {
-        //TODO: Watt is, wenn die ApiUrl anders als erwartet eingetragen wurde
         /**@var WowzaRecording $recording */
         return $wowzaConfig->getApiUrl() .
         '/' . $method .
         '?app=' . $wowzaConfig->getApp() .
         '&streamname=' . $recording->getStreamname() .
+        '&option=' . $recording->getOption() .
         '&action=' . $recording->getAction() .
-        '&fileTemplate=' . $suffix . '_${SourceStreamName}';
+        '&outputFile=' . $prefix . '_' . $recording->getStreamname() . '.mp4';
     }
 }

@@ -3,6 +3,7 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
+use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -13,22 +14,19 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 interface RecordingHandler
 {
     /**
-     * @param string $streamname
-     * @param string $suffix
+     * @param string $streamName
      * @param string $option
-     *
+     * @param $prefix
      * @return JsonResponse
      */
-    public function startRecording($streamname, $suffix = '', $option = 'append');
+    public function startRecording($streamName, $option = WowzaApiClient::OPTION_OVERWRITE, $prefix);
 
     /**
-     * @param string $streamname
-     * @param string $suffix
-     * @param string $option
-     *
+     * @param string $streamName
+     * @param $prefix
      * @return JsonResponse
      */
-    public function stopRecording($streamname, $suffix = '', $option = 'append');
+    public function stopRecording($streamName, $prefix);
 
     /**
      * @return Config

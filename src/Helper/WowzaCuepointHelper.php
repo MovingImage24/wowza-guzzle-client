@@ -14,13 +14,9 @@ use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
 class WowzaCuepointHelper extends AbstractWowzaHelper
 {
     /**
-     * @param string     $method
-     * @param Config     $wowzaConfig
-     * @param WowzaModel $cuepoint
-     *
-     * @return string
+     * @inheritdoc
      */
-    public function buildUrl($method, Config $wowzaConfig, WowzaModel $cuepoint)
+    public function buildUrl($method, $wowzaConfig, WowzaModel $cuepoint, $prefix = '')
     {
         //TODO: Watt is, wenn die ApiUrl anders als erwartet eingetragen wurde
         /**@var WowzaCuepoint $cuepoint */

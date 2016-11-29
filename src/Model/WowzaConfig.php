@@ -7,15 +7,15 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Model;
  */
 final class WowzaConfig implements Config
 {
-    /** @var  string */
+    /** @var string */
     private $username;
-    /** @var  string */
+    /** @var string */
     private $password;
-    /** @var  string */
+    /** @var string */
     private $app;
-    /** @var  string */
+    /** @var string */
     private $apiUrl;
-    /** @var  string */
+    /** @var string */
     private $playoutUrl;
 
     /**
@@ -97,6 +97,4 @@ final class WowzaConfig implements Config
     {
         $this->playoutUrl = $playoutUrl;
     }
-
-
 }

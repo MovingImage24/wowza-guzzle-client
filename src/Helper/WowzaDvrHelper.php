@@ -3,7 +3,6 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper;
 
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Dvr\WowzaDvr;
-use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
 
 /**
@@ -12,13 +11,9 @@ use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
 class WowzaDvrHelper extends AbstractWowzaHelper
 {
     /**
-     * @param string     $method
-     * @param Config     $wowzaConfig
-     * @param WowzaModel $dvr
-     *
-     * @return string
+     * @inheritdoc
      */
-    public function buildUrl($method, Config $wowzaConfig, WowzaModel $dvr)
+    public function buildUrl($method, $wowzaConfig, WowzaModel $dvr, $prefix = '')
     {
         //TODO: Watt is, wenn die ApiUrl anders als erwartet eingetragen wurde
         /**@var WowzaDvr $dvr */

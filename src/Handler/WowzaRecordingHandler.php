@@ -23,36 +23,32 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
      * @param WowzaRecordingHelper $recordingHelper
      * @param WowzaRecording       $recording
      */
-    public function __construct(
-        Client $client,
-        WowzaRecordingHelper $recordingHelper,
-        WowzaRecording $recording
-    )
+    public function __construct(Client $client, WowzaRecordingHelper $recordingHelper, WowzaRecording $recording)
     {
         parent::__construct($client);
 
-        $this->recordingHelper   = $recordingHelper;
-        $this->recording         = $recording;
+        $this->recordingHelper = $recordingHelper;
+        $this->recording       = $recording;
     }
 
     /**
      * @inheritDoc
      */
-    public function startRecording($streamname, $suffix = '', $option = 'append')
+    public function startRecording($streamName, $option = self::OPTION_VERSION, $prefix = '')
     {
         $this->recording->setAction('startRecording');
 
-        return $this->recordingTask($streamname, $option, $suffix);
+        return $this->recordingTask($streamName, $option, $prefix);
     }
 
     /**
      * @inheritDoc
      */
-    public function stopRecording($streamname, $suffix = '', $option = 'append')
+    public function stopRecording($streamName, $prefix = '')
     {
         $this->recording->setAction('stopRecording');
 
-        return $this->recordingTask($streamname, $option, $suffix);
+        return $this->recordingTask($streamName, null, $prefix);
     }
 
     /**
@@ -72,22 +68,17 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
     }
 
     /**
-     * @param string $streamname
+     * @param string $streamName
      * @param string $option
-     * @param string $suffix
      *
-     * @return bool
-     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiConnectException
-     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
+     * @param string $prefix
      */
-    private function recordingTask($streamname, $option, $suffix = '')
+    private function recordingTask($streamName, $option = null, $prefix = '')
     {
-        $this->recording->setStreamname($streamname);
+        $this->recording->setStreamname($streamName);
         $this->recording->setOption($option);
 
-        $url = $this->recordingHelper->buildUrl('livestreamrecord', $this->wowzaConfig, $this->recording, $suffix);
+        $url = $this->recordingHelper->buildUrl('livestreamrecord', $this->wowzaConfig, $this->recording, $prefix);
         $this->recordingHelper->call($this->wowzaConfig, $url, $this->client);
-
-        return true;
     }
 }
