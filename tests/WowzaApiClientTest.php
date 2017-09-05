@@ -29,18 +29,20 @@ class WowzaApiClientTest extends \PHPUnit_Framework_TestCase
         $this->wowzaConfig->setApp('app');
         $this->wowzaConfig->setUsername('foo');
         $this->wowzaConfig->setPassword('bar');
+
+        $this->client->createRequest('GET',
+            $this->wowzaConfig->getApiUrl() . '/livesetmetadata',
+            [
+                'auth' => ['foo', 'bar', 'Digest'],
+                'query' => ['app' => $this->wowzaConfig->getApp()]
+            ]
+        )->shouldBeCalledTimes('1')->willReturn($this->guzzleRequest);
     }
 
     /**
      * @test
      */
     public function correctWowza() {
-        $this->client->createRequest('GET',
-            $this->wowzaConfig->getApiUrl() . '/livesetmetadata?app=' . $this->wowzaConfig->getApp(),
-            [
-                'auth' => ['foo', 'bar', 'Digest']
-            ]
-        )->shouldBeCalledTimes('1')->willReturn($this->guzzleRequest);
         $this->client->send($this->guzzleRequest)->shouldBeCalledTimes('1')->willReturn(new Response(200));
 
         $result = $this->wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
@@ -51,13 +53,6 @@ class WowzaApiClientTest extends \PHPUnit_Framework_TestCase
      * @test
      */
     public function wrongWowzaHost() {
-        $this->client->createRequest('GET',
-            $this->wowzaConfig->getApiUrl() . '/livesetmetadata?app=' . $this->wowzaConfig->getApp(),
-            [
-                'auth' => ['foo', 'bar', 'Digest']
-            ]
-        )->shouldBeCalledTimes('1')->willReturn($this->guzzleRequest);
-
         $this->client->send($this->guzzleRequest)
             ->shouldBeCalledTimes('1')
             ->willThrow(new \Exception('exception'));
@@ -70,13 +65,6 @@ class WowzaApiClientTest extends \PHPUnit_Framework_TestCase
      * @test
      */
     public function wrongWowzaPass() {
-        $this->client->createRequest('GET',
-            $this->wowzaConfig->getApiUrl() . '/livesetmetadata?app=' . $this->wowzaConfig->getApp(),
-            [
-                'auth' => ['foo', 'bar', 'Digest']
-            ]
-        )->shouldBeCalledTimes('1')->willReturn($this->guzzleRequest);
-
         $this->client->send($this->guzzleRequest)
             ->shouldBeCalledTimes('1')
             ->willReturn(new Response(401));

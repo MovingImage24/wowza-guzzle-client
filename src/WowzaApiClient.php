@@ -47,13 +47,13 @@ class WowzaApiClient
      */
     public function checkWowzaConfig(Config $wowzaConfig) {
         $url = $wowzaConfig->getApiUrl() .
-            '/livesetmetadata' .
-            '?app=' . $wowzaConfig->getApp();
+            '/livesetmetadata';
         $request = $this->client->createRequest(
             'GET',
             $url,
             [
-                'auth' => [$wowzaConfig->getUsername(), $wowzaConfig->getPassword(), 'Digest']
+                'auth' => [$wowzaConfig->getUsername(), $wowzaConfig->getPassword(), 'Digest'],
+                'query' => ['app' => $wowzaConfig->getApp()]
             ]
         );
 
