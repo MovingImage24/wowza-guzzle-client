@@ -4,6 +4,7 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Tests;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Message\Response;
+use GuzzleHttp\Psr7\Request;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 
@@ -11,15 +12,18 @@ class WowzaApiClientTest extends \PHPUnit_Framework_TestCase
 {
     /** @var Client $client */
     private $client;
-    /** @var  WowzaApiClient $obj */
-    private $obj;
-    /**@var WowzaConfig $wowzaConfig*/
+    /** @var WowzaApiClient $obj */
+    private $wowzaApiClient;
+    /**@var WowzaConfig $wowzaConfig */
     private $wowzaConfig;
+    /** @var Request $guzzleRequest */
+    private $guzzleRequest;
 
     public function setUp()
     {
+        $this->guzzleRequest = $this->prophesize('\GuzzleHttp\Message\Request');
         $this->client = $this->prophesize('\GuzzleHttp\Client');
-        $this->obj = new WowzaApiClient($this->client->reveal());
+        $this->wowzaApiClient = new WowzaApiClient($this->client->reveal());
         $this->wowzaConfig = new WowzaConfig();
         $this->wowzaConfig->setApiUrl('http://host:123');
         $this->wowzaConfig->setApp('app');
@@ -31,18 +35,15 @@ class WowzaApiClientTest extends \PHPUnit_Framework_TestCase
      * @test
      */
     public function correctWowza() {
-        $guzzleRequest = $this->prophesize('\GuzzleHttp\Message\Request');
-        $this->client->createRequest(
-            'GET',
+        $this->client->createRequest('GET',
             $this->wowzaConfig->getApiUrl() . '/livesetmetadata?app=' . $this->wowzaConfig->getApp(),
             [
                 'auth' => ['foo', 'bar', 'Digest']
             ]
-        )->shouldBeCalledTimes('1')->willReturn($guzzleRequest);
+        )->shouldBeCalledTimes('1')->willReturn($this->guzzleRequest);
+        $this->client->send($this->guzzleRequest)->shouldBeCalledTimes('1')->willReturn(new Response(200));
 
-        $this->client->send($guzzleRequest)->shouldBeCalledTimes('1')->willReturn(new Response(200));
-
-        $result = $this->obj->checkWowzaConfig($this->wowzaConfig);
+        $result = $this->wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
         $this->assertEquals(200, $result);
     }
 
@@ -50,20 +51,18 @@ class WowzaApiClientTest extends \PHPUnit_Framework_TestCase
      * @test
      */
     public function wrongWowzaHost() {
-        $guzzleRequest = $this->prophesize('\GuzzleHttp\Message\Request');
-        $this->client->createRequest(
-            'GET',
+        $this->client->createRequest('GET',
             $this->wowzaConfig->getApiUrl() . '/livesetmetadata?app=' . $this->wowzaConfig->getApp(),
             [
                 'auth' => ['foo', 'bar', 'Digest']
             ]
-        )->shouldBeCalledTimes('1')->willReturn($guzzleRequest);
+        )->shouldBeCalledTimes('1')->willReturn($this->guzzleRequest);
 
-        $this->client->send($guzzleRequest)
+        $this->client->send($this->guzzleRequest)
             ->shouldBeCalledTimes('1')
             ->willThrow(new \Exception('exception'));
 
-        $result = $this->obj->checkWowzaConfig($this->wowzaConfig);
+        $result = $this->wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
         $this->assertEquals(404, $result);
     }
 
@@ -71,20 +70,18 @@ class WowzaApiClientTest extends \PHPUnit_Framework_TestCase
      * @test
      */
     public function wrongWowzaPass() {
-        $guzzleRequest = $this->prophesize('\GuzzleHttp\Message\Request');
-        $this->client->createRequest(
-            'GET',
+        $this->client->createRequest('GET',
             $this->wowzaConfig->getApiUrl() . '/livesetmetadata?app=' . $this->wowzaConfig->getApp(),
             [
                 'auth' => ['foo', 'bar', 'Digest']
             ]
-        )->shouldBeCalledTimes('1')->willReturn($guzzleRequest);
+        )->shouldBeCalledTimes('1')->willReturn($this->guzzleRequest);
 
-        $this->client->send($guzzleRequest)
+        $this->client->send($this->guzzleRequest)
             ->shouldBeCalledTimes('1')
             ->willReturn(new Response(401));
 
-        $result = $this->obj->checkWowzaConfig($this->wowzaConfig);
+        $result = $this->wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
         $this->assertEquals(401, $result);
     }
 }
