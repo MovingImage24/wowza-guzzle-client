@@ -45,7 +45,7 @@ class WowzaApiClient
      * @param Config $wowzaConfig
      * @return Integer
      */
-    public function checkWowzaConfig($wowzaConfig) {
+    public function checkWowzaConfig(Config $wowzaConfig) {
         $url = $wowzaConfig->getApiUrl() .
             '/livesetmetadata' .
             '?app=' . $wowzaConfig->getApp();
