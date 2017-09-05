@@ -40,4 +40,28 @@ class WowzaApiClient
     {
         $this->wowzaConfig = $wowzaConfig;
     }
+
+    /**
+     * @param Config $wowzaConfig
+     * @return Integer
+     */
+    public function checkWowzaConfig($wowzaConfig) {
+        $url = $wowzaConfig->getApiUrl() .
+            '/livesetmetadata' .
+            '?app=' . $wowzaConfig->getApp();
+        $request = $this->client->createRequest(
+            'GET',
+            $url,
+            [
+                'auth' => [$wowzaConfig->getUsername(), $wowzaConfig->getPassword(), 'Digest']
+            ]
+        );
+
+        try {
+            $result = $this->client->send($request);
+            return $result->getStatusCode();
+        } catch (\Exception $e) {
+            return 404;
+        }
+    }
 }
