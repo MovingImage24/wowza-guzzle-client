@@ -55,7 +55,7 @@ class WowzaApiClientTest extends \PHPUnit_Framework_TestCase
     public function wrongWowzaHost() {
         $this->client->send($this->guzzleRequest)
             ->shouldBeCalledTimes('1')
-            ->willThrow(new \Exception('exception'));
+            ->willReturn(new Response(404));
 
         $result = $this->wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
         $this->assertEquals(404, $result);
@@ -71,5 +71,29 @@ class WowzaApiClientTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
         $this->assertEquals(401, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function wowzaTimeout() {
+        $this->client->send($this->guzzleRequest)
+            ->shouldBeCalledTimes('1')
+            ->willReturn(new Response(408));
+
+        $result = $this->wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
+        $this->assertEquals(408, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function wowzaInternalError() {
+        $this->client->send($this->guzzleRequest)
+            ->shouldBeCalledTimes('1')
+            ->willReturn(new Response(500));
+
+        $result = $this->wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
+        $this->assertEquals(500, $result);
     }
 }
