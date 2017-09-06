@@ -55,7 +55,7 @@ class WowzaApiClientTest extends \PHPUnit_Framework_TestCase
     public function wrongWowzaHost() {
         $this->client->send($this->guzzleRequest)
             ->shouldBeCalledTimes('1')
-            ->willThrow(new \Exception('exception'));
+            ->willReturn(new Response(404));
 
         $result = $this->wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
         $this->assertEquals(404, $result);

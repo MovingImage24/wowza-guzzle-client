@@ -3,6 +3,7 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
 
 /**
@@ -60,8 +61,8 @@ class WowzaApiClient
         try {
             $result = $this->client->send($request);
             return $result->getStatusCode();
-        } catch (\Exception $e) {
-            return 404;
+        } catch (ClientException $e) {
+            return $e->getResponse()->getStatusCode();
         }
     }
 }
