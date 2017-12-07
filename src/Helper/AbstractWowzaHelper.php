@@ -3,13 +3,10 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ConnectException;
-use Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiConnectException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
-use Mi\WebcastManager\StreamingServer\Model\StreamingServer;
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
@@ -22,7 +19,6 @@ abstract class AbstractWowzaHelper
      * @param Client $client
      *
      * @return mixed|\Psr\Http\Message\ResponseInterface
-     * @throws MiConnectException
      * @throws MiException
      */
     public function call(Config $wowzaConfig, $url, Client $client)
@@ -38,11 +34,7 @@ abstract class AbstractWowzaHelper
 
             $result = $client->send($request);
         } catch (\Exception $e) {
-            if ($e instanceof ConnectException) {
-                throw new MiConnectException($e->getMessage());
-            }
-
-            throw new MiException();
+            throw new MiException($e->getMessage());
         }
 
         return $result;
@@ -50,7 +42,7 @@ abstract class AbstractWowzaHelper
 
     /**
      * @param string $method
-     * @param WowzaConfig|StreamingServer $wowzaConfig
+     * @param WowzaConfig $wowzaConfig
      * @param WowzaModel $cuepoint
      *
      * @param $prefix

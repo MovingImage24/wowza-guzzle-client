@@ -12,11 +12,11 @@
 
     <services>
 
-        <service id="mi_wowza_guzzle_api" class="Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient">
+        <service id="mi_wowza_guzzle_api" class="Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient" shared="false">
             <argument type="service" id="guzzle_client_wowza"/>
         </service>
 
-        <service id="guzzle_client_wowza" class="GuzzleHttp\Client" public="false">
+        <service id="guzzle_client_wowza" class="GuzzleHttp\Client" public="false" shared="false">
             <argument>%guzzle_client_config%</argument>
         </service>
 

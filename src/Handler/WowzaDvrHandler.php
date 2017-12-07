@@ -79,6 +79,7 @@ class WowzaDvrHandler extends WowzaApiClient implements DvrHandler
      * @param string $recordingname
      *
      * @return bool
+     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
      */
     private function dvrTask($streamname, $recordingname)
     {
