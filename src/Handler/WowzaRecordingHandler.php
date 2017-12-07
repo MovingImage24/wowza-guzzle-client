@@ -72,6 +72,8 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
      * @param string $option
      *
      * @param string $prefix
+     *
+     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
      */
     private function recordingTask($streamName, $option = null, $prefix = '')
     {

@@ -84,34 +84,6 @@ class DvrHelperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiConnectException
-     */
-    public function callMiConnectException()
-    {
-        $guzzleResponse = $this->prophesize('\GuzzleHttp\Message\Response');
-        $guzzleRequest = $this->prophesize('\GuzzleHttp\Message\Request');
-
-        $guzzleClient = $this->prophesize('\GuzzleHttp\Client');
-        $guzzleClient->createRequest(
-            'GET',
-            'url',
-            [
-                'auth' => ['foo', 'bar', 'Digest']
-            ]
-        )->shouldBeCalledTimes('1')->willReturn($guzzleRequest);
-
-        $guzzleClient
-            ->send($guzzleRequest)
-            ->shouldBeCalled('1')
-            ->willThrow(new ConnectException('exception', $guzzleRequest->reveal()));
-
-        $result = $this->obj->call($this->wowzaConfig, 'url', $guzzleClient->reveal());
-        $this->assertEquals($guzzleResponse->getStatusCode(), $result->getStatusCode());
-    }
-
-    /**
-     * @test
      */
     public function buildUrl()
     {
