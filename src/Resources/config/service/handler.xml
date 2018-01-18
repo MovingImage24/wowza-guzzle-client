@@ -18,7 +18,7 @@
         </service>
 
         <service id="mi_wowza_cuepoint_handler" class="Mi\Bundle\WowzaGuzzleClientBundle\Handler\WowzaCuepointHandler"
-                 parent="mi_wowza_guzzle_api">
+                 parent="mi_wowza_guzzle_api" shared="false">
             <argument type="service" id="mi_wowza_cuepoint_helper"/>
             <argument type="service" id="mi_wowza_cuepoint_model"/>
             <argument type="service" id="mi_wowza_cuepoint_response_model"/>
