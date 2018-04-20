@@ -17,11 +17,11 @@ class WowzaDvrHelper extends AbstractWowzaHelper
     {
         //TODO: Watt is, wenn die ApiUrl anders als erwartet eingetragen wurde
         /**@var WowzaDvr $dvr */
-        return $wowzaConfig->getApiUrl() .
-        '/' . $method .
-        '?app=' . $wowzaConfig->getApp() .
-        '&streamname=' . $dvr->getStreamname() .
-        '&recordingname=' . $dvr->getRecordingname() .
-        '&action=' . $dvr->getAction();
+        return $wowzaConfig->getApiUrl().
+            '/'.$method.
+            '?app='.$wowzaConfig->getApp().
+            '&streamname='.$dvr->getStreamname().
+            '&recordingname='.$dvr->getRecordingname().
+            '&action='.$dvr->getAction();
     }
 }

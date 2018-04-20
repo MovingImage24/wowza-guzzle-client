@@ -19,7 +19,7 @@ class WowzaCuepointHandler extends WowzaApiClient implements CuepointHandler
     private $cuepointHelper;
     /**@var WowzaCuepoint $cuepoint */
     private $cuepoint;
-    /** @var Response  */
+    /** @var Response */
     private $cuepointResponse;
 
     /**
@@ -33,17 +33,18 @@ class WowzaCuepointHandler extends WowzaApiClient implements CuepointHandler
         WowzaCuepointHelper $cuepointHelper,
         WowzaCuepoint $cuepointModel,
         Response $cuepointResponse
-    )
-    {
+    ) {
         parent::__construct($client);
 
-        $this->cuepointHelper   = $cuepointHelper;
-        $this->cuepoint         = $cuepointModel;
+        $this->cuepointHelper = $cuepointHelper;
+        $this->cuepoint = $cuepointModel;
         $this->cuepointResponse = $cuepointResponse;
     }
 
     /**
      * @inheritDoc
+     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function insertCuepoint($streamname, $text)
     {
@@ -51,8 +52,8 @@ class WowzaCuepointHandler extends WowzaApiClient implements CuepointHandler
         $this->cuepoint->setStreamname($streamname);
         $this->cuepoint->setText($text);
 
-        $url            = $this->cuepointHelper->buildUrl('livesetmetadata', $this->wowzaConfig, $this->cuepoint);
-        $result         = $this->cuepointHelper->call($this->wowzaConfig, $url, $this->client);
+        $url = $this->cuepointHelper->buildUrl('livesetmetadata', $this->wowzaConfig, $this->cuepoint);
+        $result = $this->cuepointHelper->call($this->wowzaConfig, $url, $this->client);
         $parsedResponse = $this->cuepointHelper->parseResponse($result);
         $this->cuepointResponse->setTimestamp($parsedResponse);
 

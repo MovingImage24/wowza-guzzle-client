@@ -15,7 +15,7 @@ class RecordingHelperTest extends \PHPUnit_Framework_TestCase
 {
     /**@var WowzaRecordingHelper $obj */
     private $obj;
-    /**@var WowzaConfig $wowzaConfig*/
+    /**@var WowzaConfig $wowzaConfig */
     private $wowzaConfig;
 
     public function setUp()
@@ -36,7 +36,7 @@ class RecordingHelperTest extends \PHPUnit_Framework_TestCase
         $recording = new WowzaRecording();
         $recording->setAction('startRecording');
         $recording->setStreamname('stream');
-        $result   = $this->obj->buildUrl('foo', $this->wowzaConfig, $recording, 'foobar');
+        $result = $this->obj->buildUrl('foo', $this->wowzaConfig, $recording, 'foobar');
         $expected =
             'http://host:123/foo?app=app&streamname=stream&option=&action=startRecording&outputFile=foobar_stream.mp4';
 

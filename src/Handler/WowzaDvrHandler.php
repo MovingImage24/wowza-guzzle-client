@@ -35,11 +35,13 @@ class WowzaDvrHandler extends WowzaApiClient implements DvrHandler
         parent::__construct($client);
 
         $this->dvrHelper = $dvrHelper;
-        $this->dvr       = $dvr;
+        $this->dvr = $dvr;
     }
 
     /**
      * @inheritDoc
+     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function startDvr($streamname, $recordingname)
     {
@@ -50,6 +52,8 @@ class WowzaDvrHandler extends WowzaApiClient implements DvrHandler
 
     /**
      * @inheritDoc
+     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function stopDvr($streamname, $recordingname)
     {
@@ -80,6 +84,7 @@ class WowzaDvrHandler extends WowzaApiClient implements DvrHandler
      *
      * @return bool
      * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function dvrTask($streamname, $recordingname)
     {

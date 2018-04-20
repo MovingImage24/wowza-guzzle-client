@@ -6,7 +6,6 @@ php:
 
 before_script:
   - composer self-update
-  - composer update --dev --no-interaction --prefer-source
   - composer install --dev
 
 script:

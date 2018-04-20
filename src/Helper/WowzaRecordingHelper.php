@@ -16,12 +16,12 @@ class WowzaRecordingHelper extends AbstractWowzaHelper
     public function buildUrl($method, $wowzaConfig, WowzaModel $recording, $prefix)
     {
         /**@var WowzaRecording $recording */
-        return $wowzaConfig->getApiUrl() .
-        '/' . $method .
-        '?app=' . $wowzaConfig->getApp() .
-        '&streamname=' . $recording->getStreamname() .
-        '&option=' . $recording->getOption() .
-        '&action=' . $recording->getAction() .
-        '&outputFile=' . $prefix . '_' . $recording->getStreamname() . '.mp4';
+        return $wowzaConfig->getApiUrl().
+            '/'.$method.
+            '?app='.$wowzaConfig->getApp().
+            '&streamname='.$recording->getStreamname().
+            '&option='.$recording->getOption().
+            '&action='.$recording->getAction().
+            '&outputFile='.$prefix.'_'.$recording->getStreamname().'.mp4';
     }
 }

@@ -3,6 +3,8 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
 
@@ -23,9 +25,9 @@ class WowzaApiClient
     /**
      * WowzaApiClient constructor.
      *
-     * @param Client      $client
+     * @param Client $client
      */
-    public function __construct(Client $client)
+    public function __construct(ClientInterface $client)
     {
         $this->client = $client;
     }
@@ -48,22 +50,24 @@ class WowzaApiClient
 
     /**
      * @param Config $wowzaConfig
+     *
      * @return Integer
+     * @throws GuzzleException
      */
-    public function checkWowzaConfig(Config $wowzaConfig) {
-        $url = $wowzaConfig->getApiUrl() .
-            '/livesetmetadata';
-        $request = $this->client->createRequest(
-            'GET',
-            $url,
-            [
-                'auth' => [$wowzaConfig->getUsername(), $wowzaConfig->getPassword(), 'Digest'],
-                'query' => ['app' => $wowzaConfig->getApp()]
-            ]
-        );
+    public function checkWowzaConfig(Config $wowzaConfig)
+    {
+        $url = $wowzaConfig->getApiUrl().'/livesetmetadata';
+
 
         try {
-            $result = $this->client->send($request);
+            $result = $this->client->request(
+                'GET',
+                $url,
+                [
+                    'auth' => [$wowzaConfig->getUsername(), $wowzaConfig->getPassword(), 'Digest'],
+                    'query' => ['app' => $wowzaConfig->getApp()]
+                ]
+            );
 
             return $result->getStatusCode();
         } catch (RequestException $e) {

@@ -1,11 +1,11 @@
 <?php
 
-
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper\Tests;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaDvrHelper;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Dvr\WowzaDvr;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
@@ -18,7 +18,7 @@ class DvrHelperTest extends \PHPUnit_Framework_TestCase
 {
     /**@var WowzaDvrHelper $obj */
     private $obj;
-    /**@var WowzaConfig $wowzaConfig*/
+    /**@var WowzaConfig $wowzaConfig */
     private $wowzaConfig;
 
     public function setUp()
@@ -33,53 +33,26 @@ class DvrHelperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
      */
     public function call()
     {
-        /** @var Client $guzzleClient */
-        $guzzleClient = $this->prophesize('\GuzzleHttp\Client');
-        $guzzleRequest = $this->prophesize('\GuzzleHttp\Message\Request');
-        $guzzleClient->createRequest(
-            'GET',
-            'url',
-            [
-                'auth' => ['foo', 'bar', 'Digest']
-            ]
-        )->shouldBeCalledTimes('1')->willReturn($guzzleRequest);
-
-        $guzzleClient->send($guzzleRequest)->shouldBeCalledTimes('1')->willReturn('bar');
-
-        $result = $this->obj->call($this->wowzaConfig, 'url', $guzzleClient->reveal());
-        $this->assertEquals('bar', $result);
+        $result = $this->obj->call($this->wowzaConfig, 'url', $this->getClient(200, 'bar'));
+        $this->assertEquals('bar', $result->getBody()->getContents());
     }
 
     /**
      * @test
      *
      * @expectedException \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
      */
     public function callMiException()
     {
-        $guzzleResponse = $this->prophesize('\GuzzleHttp\Message\Response');
-        $guzzleRequest = $this->prophesize('\GuzzleHttp\Message\Request');
-
-        /** @var Client $guzzleClient */
-        $guzzleClient = $this->prophesize('\GuzzleHttp\Client');
-        $guzzleClient->createRequest(
-            'GET',
-            'url',
-            [
-                'auth' => ['foo', 'bar', 'Digest']
-            ]
-        )->shouldBeCalledTimes('1')->willReturn($guzzleRequest);
-
-        $guzzleClient
-            ->send($guzzleRequest)
-            ->shouldBeCalledTimes('1')
-            ->willThrow(new ClientException('exception', $guzzleRequest->reveal(), $guzzleResponse->reveal()));
-
-        $result = $this->obj->call($this->wowzaConfig, 'url', $guzzleClient->reveal());
-        $this->assertEquals($guzzleResponse->getStatusCode(), $result->getStatusCode());
+        $result = $this->obj->call($this->wowzaConfig, 'url', $this->getClient(404));
+        $this->assertEquals(404, $result->getStatusCode());
     }
 
     /**
@@ -91,9 +64,28 @@ class DvrHelperTest extends \PHPUnit_Framework_TestCase
         $dvr->setAction('start');
         $dvr->setStreamname('stream');
         $dvr->setRecordingname('recording');
-        $result   = $this->obj->buildUrl('foo', $this->wowzaConfig, $dvr);
+        $result = $this->obj->buildUrl('foo', $this->wowzaConfig, $dvr);
         $expected = 'http://host:123/foo?app=app&streamname=stream&recordingname=recording&action=start';
 
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @param       $statusCode
+     * @param       $body
+     * @param array $headers
+     *
+     * @return Client
+     */
+    private function getClient($statusCode, $body = '', $headers = [])
+    {
+        $mock = new MockHandler([
+            new Response($statusCode, $headers, $body),
+        ]);
+        $handler = HandlerStack::create($mock);
+
+        return new Client([
+            'handler' => $handler
+        ]);
     }
 }
