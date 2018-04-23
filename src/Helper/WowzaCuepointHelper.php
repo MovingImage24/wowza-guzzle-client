@@ -2,7 +2,7 @@
 
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper;
 
-use GuzzleHttp\Message\Response;
+use GuzzleHttp\Psr7\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\WowzaCuepoint;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
@@ -19,11 +19,11 @@ class WowzaCuepointHelper extends AbstractWowzaHelper
     {
         //TODO: Watt is, wenn die ApiUrl anders als erwartet eingetragen wurde
         /**@var WowzaCuepoint $cuepoint */
-        return $wowzaConfig->getApiUrl() .
-        '/' . $method .
-        '?app=' . $wowzaConfig->getApp() .
-        '&streamname=' . $cuepoint->getStreamname() .
-        '&text=' . urlencode($cuepoint->getText());
+        return $wowzaConfig->getApiUrl().
+            '/'.$method.
+            '?app='.$wowzaConfig->getApp().
+            '&streamname='.$cuepoint->getStreamname().
+            '&text='.urlencode($cuepoint->getText());
     }
 
     /**
@@ -37,7 +37,9 @@ class WowzaCuepointHelper extends AbstractWowzaHelper
         if (preg_match('/.* is required/', $response->getBody()) ||
             preg_match('/.* not found/', $response->getBody())
         ) {
-            throw new MiException();
+            throw new MiException(
+                'Something is wrong with the response of Wowza server: [body] '.$response->getBody()->getContents()
+            );
         }
 
         $timestamp = '';

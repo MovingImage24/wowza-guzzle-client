@@ -3,8 +3,10 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Tests;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Message\Response;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 
@@ -19,81 +21,94 @@ class WowzaApiClientTest extends \PHPUnit_Framework_TestCase
     /** @var Request $guzzleRequest */
     private $guzzleRequest;
 
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function setUp()
     {
-        $this->guzzleRequest = $this->prophesize('\GuzzleHttp\Message\Request');
-        $this->client = $this->prophesize('\GuzzleHttp\Client');
-        $this->wowzaApiClient = new WowzaApiClient($this->client->reveal());
         $this->wowzaConfig = new WowzaConfig();
         $this->wowzaConfig->setApiUrl('http://host:123');
         $this->wowzaConfig->setApp('app');
         $this->wowzaConfig->setUsername('foo');
         $this->wowzaConfig->setPassword('bar');
-
-        $this->client->createRequest('GET',
-            $this->wowzaConfig->getApiUrl() . '/livesetmetadata',
-            [
-                'auth' => ['foo', 'bar', 'Digest'],
-                'query' => ['app' => $this->wowzaConfig->getApp()]
-            ]
-        )->shouldBeCalledTimes('1')->willReturn($this->guzzleRequest);
     }
 
     /**
      * @test
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function correctWowza() {
-        $this->client->send($this->guzzleRequest)->shouldBeCalledTimes('1')->willReturn(new Response(200));
+    public function correctWowza()
+    {
+        $wowzaApiClient = new WowzaApiClient($this->getClient(200));
 
-        $result = $this->wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
+        $result = $wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
         $this->assertEquals(200, $result);
     }
 
     /**
      * @test
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function wrongWowzaHost() {
-        $this->client->send($this->guzzleRequest)
-            ->shouldBeCalledTimes('1')
-            ->willReturn(new Response(404));
+    public function wrongWowzaHost()
+    {
+        $wowzaApiClient = new WowzaApiClient($this->getClient(404));
 
-        $result = $this->wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
+        $result = $wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
         $this->assertEquals(404, $result);
     }
 
     /**
      * @test
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function wrongWowzaPass() {
-        $this->client->send($this->guzzleRequest)
-            ->shouldBeCalledTimes('1')
-            ->willReturn(new Response(401));
+    public function wrongWowzaPass()
+    {
+        $wowzaApiClient = new WowzaApiClient($this->getClient(401));
 
-        $result = $this->wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
+        $result = $wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
         $this->assertEquals(401, $result);
     }
 
     /**
      * @test
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function wowzaTimeout() {
-        $this->client->send($this->guzzleRequest)
-            ->shouldBeCalledTimes('1')
-            ->willReturn(new Response(408));
+    public function wowzaTimeout()
+    {
+        $wowzaApiClient = new WowzaApiClient($this->getClient(408));
 
-        $result = $this->wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
+        $result = $wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
         $this->assertEquals(408, $result);
     }
 
     /**
      * @test
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function wowzaInternalError() {
-        $this->client->send($this->guzzleRequest)
-            ->shouldBeCalledTimes('1')
-            ->willReturn(new Response(500));
+    public function wowzaInternalError()
+    {
+        $wowzaApiClient = new WowzaApiClient($this->getClient(500));
 
-        $result = $this->wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
+        $result = $wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
         $this->assertEquals(500, $result);
+    }
+
+    /**
+     * @param       $statusCode
+     * @param       $body
+     * @param array $headers
+     *
+     * @return Client
+     */
+    private function getClient($statusCode, $body = '', $headers = [])
+    {
+        $mock = new MockHandler([
+            new Response($statusCode, $headers, $body),
+        ]);
+        $handler = HandlerStack::create($mock);
+
+        return new Client([
+            'handler' => $handler
+        ]);
     }
 }

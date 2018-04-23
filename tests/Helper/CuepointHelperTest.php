@@ -3,7 +3,7 @@
 
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper\Tests;
 
-use GuzzleHttp\Message\Response;
+use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Stream\Stream;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaCuepointHelper;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\WowzaCuepoint;
@@ -17,7 +17,7 @@ class CuepointHelperTest extends \PHPUnit_Framework_TestCase
 {
     /**@var WowzaCuepointHelper $obj */
     private $obj;
-    /**@var WowzaConfig $wowzaConfig*/
+    /**@var WowzaConfig $wowzaConfig */
     private $wowzaConfig;
 
     public function setUp()
@@ -39,7 +39,7 @@ class CuepointHelperTest extends \PHPUnit_Framework_TestCase
         $cuepoint->setStreamname('stream');
         $cuepoint->setText('{"foo":"bar","bla":1}');
 
-        $result   = $this->obj->buildUrl('foo', $this->wowzaConfig, $cuepoint);
+        $result = $this->obj->buildUrl('foo', $this->wowzaConfig, $cuepoint);
         $expected = 'http://host:123/foo?app=app&streamname=stream&text=%7B%22foo%22%3A%22bar%22%2C%22bla%22%3A1%7D';
 
         $this->assertEquals($expected, $result);
@@ -47,6 +47,7 @@ class CuepointHelperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
      */
     public function parseValidResponse()
     {
@@ -65,7 +66,7 @@ class CuepointHelperTest extends \PHPUnit_Framework_TestCase
         $cuepoint = new WowzaCuepoint();
         $cuepoint->setText('cuepointfoo');
         $response = new Response('200', ['foo' => 'bar'], Stream::factory('foobar is required'));
-        $this->obj->parseResponse($response, $cuepoint);
+        $this->obj->parseResponse($response);
     }
 
     /**
@@ -78,14 +79,13 @@ class CuepointHelperTest extends \PHPUnit_Framework_TestCase
         $cuepoint = new WowzaCuepoint();
         $cuepoint->setText('cuepointfoo');
         $response = new Response('200', ['foo' => 'bar'], Stream::factory('foobar not found'));
-        $result = $this->obj->parseResponse($response, $cuepoint);
+        $result = $this->obj->parseResponse($response);
         $this->assertEquals(
             [
-                'code'    => 400,
+                'code' => 400,
                 'message' => 'Bad Request'
             ],
             $result
         );
-
     }
 }

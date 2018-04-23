@@ -20,19 +20,18 @@ abstract class AbstractWowzaHelper
      *
      * @return mixed|\Psr\Http\Message\ResponseInterface
      * @throws MiException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function call(Config $wowzaConfig, $url, Client $client)
     {
         try {
-            $request = $client->createRequest(
+            $result = $client->request(
                 'GET',
                 $url,
                 [
                     'auth' => [$wowzaConfig->getUsername(), $wowzaConfig->getPassword(), 'Digest']
                 ]
             );
-
-            $result = $client->send($request);
         } catch (\Exception $e) {
             throw new MiException($e->getMessage());
         }
@@ -41,11 +40,12 @@ abstract class AbstractWowzaHelper
     }
 
     /**
-     * @param string $method
+     * @param string      $method
      * @param WowzaConfig $wowzaConfig
-     * @param WowzaModel $cuepoint
+     * @param WowzaModel  $cuepoint
      *
-     * @param $prefix
+     * @param             $prefix
+     *
      * @return string
      */
     abstract function buildUrl($method, $wowzaConfig, WowzaModel $cuepoint, $prefix);
