@@ -48,6 +48,6 @@ class WowzaCuepointHelper extends AbstractWowzaHelper
             $timestamp = array_pop($responseArray);
         }
 
-        return $timestamp;
+        return trim($timestamp);
     }
 }

@@ -24,11 +24,8 @@
     </filter>
 
     <logging>
-        <log type="coverage-html" target="var/coverage" title="Mi WowzaGuzzleClient"
-             charset="UTF-8" yui="true" highlight="true"
-             lowUpperBound="35" highLowerBound="70"/>
+        <log type="coverage-html" target="var/coverage" lowUpperBound="35" highLowerBound="70"/>
         <log type="coverage-clover" target="var/clover.xml"/>
-        <log type="junit" target="var/junit.xml"
-             logIncompleteSkipped="false"/>
+        <log type="junit" target="var/junit.xml"/>
     </logging>
 </phpunit>

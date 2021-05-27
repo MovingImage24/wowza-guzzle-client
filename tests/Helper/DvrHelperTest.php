@@ -1,6 +1,6 @@
 <?php
 
-namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper\Tests;
+namespace Mi\Bundle\WowzaGuzzleClientBundle\Tests\Helper;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -9,19 +9,15 @@ use GuzzleHttp\Psr7\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaDvrHelper;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Dvr\WowzaDvr;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
+use PHPUnit\Framework\TestCase;
 
-/**
- * @author Jan Arnold <jan.arnold@movingimage.com>
- *
- */
-class DvrHelperTest extends \PHPUnit_Framework_TestCase
+class DvrHelperTest extends TestCase
 {
-    /**@var WowzaDvrHelper $obj */
-    private $obj;
-    /**@var WowzaConfig $wowzaConfig */
-    private $wowzaConfig;
+    private WowzaDvrHelper $obj;
 
-    public function setUp()
+    private WowzaConfig $wowzaConfig;
+
+    public function setUp(): void
     {
         $this->obj = new WowzaDvrHelper();
         $this->wowzaConfig = new WowzaConfig();
@@ -39,20 +35,20 @@ class DvrHelperTest extends \PHPUnit_Framework_TestCase
     public function call()
     {
         $result = $this->obj->call($this->wowzaConfig, 'url', $this->getClient(200, 'bar'));
-        $this->assertEquals('bar', $result->getBody()->getContents());
+        self::assertEquals('bar', $result->getBody()->getContents());
     }
 
     /**
      * @test
      *
-     * @expectedException \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
      */
     public function callMiException()
     {
+        $this->expectException(\Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException::class);
         $result = $this->obj->call($this->wowzaConfig, 'url', $this->getClient(404));
-        $this->assertEquals(404, $result->getStatusCode());
+        self::assertEquals(404, $result->getStatusCode());
     }
 
     /**
@@ -67,7 +63,7 @@ class DvrHelperTest extends \PHPUnit_Framework_TestCase
         $result = $this->obj->buildUrl('foo', $this->wowzaConfig, $dvr);
         $expected = 'http://host:123/foo?app=app&streamname=stream&recordingname=recording&action=start';
 
-        $this->assertEquals($expected, $result);
+        self::assertEquals($expected, $result);
     }
 
     /**

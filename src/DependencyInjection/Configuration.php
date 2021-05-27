@@ -26,12 +26,12 @@ class Configuration implements ConfigurationInterface
 
         $treeBuilder->getRootNode()
             ->children()
-                ->scalarNode('wowza_admin')->isRequired()->end()
-                ->scalarNode('wowza_admin_password')->isRequired()->end()
-                ->scalarNode('wowza_protocol')->defaultValue('http')->isRequired()->end()
-                ->scalarNode('wowza_hostname')->defaultValue('localhost')->isRequired()->end()
-                ->scalarNode('wowza_dvr_port')->defaultValue('8086')->isRequired()->end()
-                ->scalarNode('wowza_app')->defaultValue('wowza-app')->isRequired()->end()
+            ->scalarNode('wowza_admin')->isRequired()->end()
+            ->scalarNode('wowza_admin_password')->isRequired()->end()
+            ->scalarNode('wowza_protocol')->defaultValue('http')->isRequired()->end()
+            ->scalarNode('wowza_hostname')->defaultValue('localhost')->isRequired()->end()
+            ->scalarNode('wowza_dvr_port')->defaultValue('8086')->isRequired()->end()
+            ->scalarNode('wowza_app')->defaultValue('wowza-app')->isRequired()->end()
             ->end();
 
         return $treeBuilder;
