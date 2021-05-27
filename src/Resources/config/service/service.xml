@@ -12,7 +12,7 @@
 
     <services>
 
-        <service id="mi_wowza_guzzle_api" class="Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient" shared="false">
+        <service id="Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient" class="Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient" shared="false">
             <argument type="service" id="guzzle_client_wowza"/>
         </service>
 

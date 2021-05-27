@@ -5,26 +5,19 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Tests;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
+use PHPUnit\Framework\TestCase;
 
-class WowzaApiClientTest extends \PHPUnit_Framework_TestCase
+class WowzaApiClientTest extends TestCase
 {
-    /** @var Client $client */
-    private $client;
-    /** @var WowzaApiClient $obj */
-    private $wowzaApiClient;
-    /**@var WowzaConfig $wowzaConfig */
-    private $wowzaConfig;
-    /** @var Request $guzzleRequest */
-    private $guzzleRequest;
+    private WowzaConfig $wowzaConfig;
 
     /**
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->wowzaConfig = new WowzaConfig();
         $this->wowzaConfig->setApiUrl('http://host:123');
@@ -42,7 +35,7 @@ class WowzaApiClientTest extends \PHPUnit_Framework_TestCase
         $wowzaApiClient = new WowzaApiClient($this->getClient(200));
 
         $result = $wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
-        $this->assertEquals(200, $result);
+        self::assertEquals(200, $result);
     }
 
     /**
@@ -54,7 +47,7 @@ class WowzaApiClientTest extends \PHPUnit_Framework_TestCase
         $wowzaApiClient = new WowzaApiClient($this->getClient(404));
 
         $result = $wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
-        $this->assertEquals(404, $result);
+        self::assertEquals(404, $result);
     }
 
     /**
@@ -66,7 +59,7 @@ class WowzaApiClientTest extends \PHPUnit_Framework_TestCase
         $wowzaApiClient = new WowzaApiClient($this->getClient(401));
 
         $result = $wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
-        $this->assertEquals(401, $result);
+        self::assertEquals(401, $result);
     }
 
     /**
@@ -78,7 +71,7 @@ class WowzaApiClientTest extends \PHPUnit_Framework_TestCase
         $wowzaApiClient = new WowzaApiClient($this->getClient(408));
 
         $result = $wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
-        $this->assertEquals(408, $result);
+        self::assertEquals(408, $result);
     }
 
     /**
@@ -90,7 +83,7 @@ class WowzaApiClientTest extends \PHPUnit_Framework_TestCase
         $wowzaApiClient = new WowzaApiClient($this->getClient(500));
 
         $result = $wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
-        $this->assertEquals(500, $result);
+        self::assertEquals(500, $result);
     }
 
     /**

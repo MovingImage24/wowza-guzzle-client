@@ -22,12 +22,9 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
+        $treeBuilder = new TreeBuilder('mi_wowza_guzzle_client');
 
-        $rootNode = $treeBuilder->root('parameters');
-        $rootNode
-            ->children()
-            ->arrayNode('mi_wowza_guzzle_client')
+        $treeBuilder->getRootNode()
             ->children()
             ->scalarNode('wowza_admin')->isRequired()->end()
             ->scalarNode('wowza_admin_password')->isRequired()->end()

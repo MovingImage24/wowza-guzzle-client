@@ -1,24 +1,24 @@
 <?php
 
 
-namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper\Tests;
+namespace Mi\Bundle\WowzaGuzzleClientBundle\Tests\Helper;
 
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaRecordingHelper;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Recording\WowzaRecording;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
  *
  */
-class RecordingHelperTest extends \PHPUnit_Framework_TestCase
+class RecordingHelperTest extends TestCase
 {
-    /**@var WowzaRecordingHelper $obj */
-    private $obj;
-    /**@var WowzaConfig $wowzaConfig */
-    private $wowzaConfig;
+    private WowzaRecordingHelper $obj;
 
-    public function setUp()
+    private WowzaConfig $wowzaConfig;
+
+    public function setUp(): void
     {
         $this->obj = new WowzaRecordingHelper();
         $this->wowzaConfig = new WowzaConfig();
@@ -40,6 +40,6 @@ class RecordingHelperTest extends \PHPUnit_Framework_TestCase
         $expected =
             'http://host:123/foo?app=app&streamname=stream&option=&action=startRecording&outputFile=foobar_stream.mp4';
 
-        $this->assertEquals($expected, $result);
+        self::assertEquals($expected, $result);
     }
 }

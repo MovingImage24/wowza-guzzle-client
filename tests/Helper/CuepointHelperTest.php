@@ -1,26 +1,21 @@
 <?php
 
-
-namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper\Tests;
+namespace Mi\Bundle\WowzaGuzzleClientBundle\Tests\Helper;
 
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Stream\Stream;
+use Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaCuepointHelper;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\WowzaCuepoint;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
+use PHPUnit\Framework\TestCase;
 
-/**
- * @author Jan Arnold <jan.arnold@movingimage.com>
- *
- */
-class CuepointHelperTest extends \PHPUnit_Framework_TestCase
+class CuepointHelperTest extends TestCase
 {
-    /**@var WowzaCuepointHelper $obj */
-    private $obj;
-    /**@var WowzaConfig $wowzaConfig */
-    private $wowzaConfig;
+    private WowzaCuepointHelper $obj;
 
-    public function setUp()
+    private WowzaConfig $wowzaConfig;
+
+    public function setUp(): void
     {
         $this->obj = new WowzaCuepointHelper();
         $this->wowzaConfig = new WowzaConfig();
@@ -42,7 +37,7 @@ class CuepointHelperTest extends \PHPUnit_Framework_TestCase
         $result = $this->obj->buildUrl('foo', $this->wowzaConfig, $cuepoint);
         $expected = 'http://host:123/foo?app=app&streamname=stream&text=%7B%22foo%22%3A%22bar%22%2C%22bla%22%3A1%7D';
 
-        $this->assertEquals($expected, $result);
+        self::assertEquals($expected, $result);
     }
 
     /**
@@ -51,36 +46,35 @@ class CuepointHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function parseValidResponse()
     {
-        $response = new Response(200, ['foo' => 'bar'], Stream::factory('Timestamp: 123'));
+        $response = new Response(200, ['foo' => 'bar'], 'Timestamp: 123');
         $result = $this->obj->parseResponse($response);
-        $this->assertEquals('123', $result);
+        self::assertEquals('123', $result);
     }
 
     /**
      * @test
-     *
-     * @expectedException \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
      */
     public function parseResponseWithIsRequiredException()
     {
+        $this->expectException(MiException::class);
         $cuepoint = new WowzaCuepoint();
         $cuepoint->setText('cuepointfoo');
-        $response = new Response('200', ['foo' => 'bar'], Stream::factory('foobar is required'));
+        $response = new Response('200', ['foo' => 'bar'], 'foobar is required');
         $this->obj->parseResponse($response);
     }
 
     /**
      * @test
-     *
-     * @expectedException \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
      */
     public function parseResponseWithNotFoundException()
     {
+        $this->expectException(MiException::class);
+
         $cuepoint = new WowzaCuepoint();
         $cuepoint->setText('cuepointfoo');
-        $response = new Response('200', ['foo' => 'bar'], Stream::factory('foobar not found'));
+        $response = new Response('200', ['foo' => 'bar'], 'foobar not found');
         $result = $this->obj->parseResponse($response);
-        $this->assertEquals(
+        self::assertEquals(
             [
                 'code' => 400,
                 'message' => 'Bad Request'
