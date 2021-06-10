@@ -15,18 +15,20 @@ interface RecordingHandler
 {
     /**
      * @param string $streamName
+     * @param string $prefix
      * @param string $option
-     * @param $prefix
-     * @return JsonResponse
      */
-    public function startRecording($streamName, $option = WowzaApiClient::OPTION_OVERWRITE, $prefix);
+    public function startRecording(
+        string $streamName,
+        string $prefix,
+        string $option = WowzaApiClient::OPTION_OVERWRITE
+    ): void;
 
     /**
      * @param string $streamName
-     * @param $prefix
-     * @return JsonResponse
+     * @param string $prefix
      */
-    public function stopRecording($streamName, $prefix);
+    public function stopRecording(string $streamName, string $prefix): void;
 
     /**
      * @return Config
@@ -36,5 +38,5 @@ interface RecordingHandler
     /**
      * @param Config $config
      */
-    public function setConfig($config);
+    public function setConfig(Config $config);
 }

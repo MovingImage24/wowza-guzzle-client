@@ -4,6 +4,7 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 
 use GuzzleHttp\Client;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaRecordingHelper;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Recording\WowzaRecording;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
 
@@ -19,9 +20,9 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
     private $recording;
 
     /**
-     * @param Client               $client
+     * @param Client $client
      * @param WowzaRecordingHelper $recordingHelper
-     * @param WowzaRecording       $recording
+     * @param WowzaRecording $recording
      */
     public function __construct(Client $client, WowzaRecordingHelper $recordingHelper, WowzaRecording $recording)
     {
@@ -36,11 +37,14 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
      * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function startRecording($streamName, $option = self::OPTION_VERSION, $prefix = '')
-    {
+    public function startRecording(
+        string $streamName,
+        string $prefix,
+        string $option = WowzaApiClient::OPTION_OVERWRITE
+    ): void {
         $this->recording->setAction('startRecording');
 
-        return $this->recordingTask($streamName, $option, $prefix);
+        $this->recordingTask($streamName, $prefix, $option);
     }
 
     /**
@@ -48,11 +52,11 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
      * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function stopRecording($streamName, $prefix = '')
+    public function stopRecording(string $streamName, string $prefix): void
     {
         $this->recording->setAction('stopRecording');
 
-        return $this->recordingTask($streamName, null, $prefix);
+        $this->recordingTask($streamName, $prefix, null);
     }
 
     /**
@@ -66,21 +70,19 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
     /**
      * @inheritDoc
      */
-    public function setConfig($config)
+    public function setConfig(Config $config)
     {
         parent::setWowzaConfig($config);
     }
 
     /**
      * @param string $streamName
-     * @param string $option
-     *
      * @param string $prefix
-     *
-     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
+     * @param string|null $option
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
      */
-    private function recordingTask($streamName, $option = null, $prefix = '')
+    private function recordingTask(string $streamName, string $prefix = '', string $option = null): void
     {
         $this->recording->setStreamname($streamName);
         $this->recording->setOption($option);

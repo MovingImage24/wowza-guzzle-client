@@ -1,3 +1,5 @@
 /vendor/
 var/
 bin/phpunit
+.idea/
+bin/
