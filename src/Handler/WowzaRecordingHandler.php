@@ -39,8 +39,8 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
      */
     public function startRecording(
         string $streamName,
-        string $prefix,
-        string $option = WowzaApiClient::OPTION_OVERWRITE
+        string $option = WowzaApiClient::OPTION_OVERWRITE,
+        string $prefix = ''
     ): void {
         $this->recording->setAction('startRecording');
 

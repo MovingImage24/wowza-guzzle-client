@@ -13,15 +13,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 interface RecordingHandler
 {
-    /**
-     * @param string $streamName
-     * @param string $prefix
-     * @param string $option
-     */
     public function startRecording(
         string $streamName,
-        string $prefix,
-        string $option = WowzaApiClient::OPTION_OVERWRITE
+        string $option = WowzaApiClient::OPTION_OVERWRITE,
+        string $prefix = ''
     ): void;
 
     /**
