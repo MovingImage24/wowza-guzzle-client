@@ -19,11 +19,7 @@ interface RecordingHandler
         string $prefix = ''
     ): void;
 
-    /**
-     * @param string $streamName
-     * @param string $prefix
-     */
-    public function stopRecording(string $streamName, string $prefix): void;
+    public function stopRecording(string $streamName, string $prefix = ''): void;
 
     /**
      * @return Config

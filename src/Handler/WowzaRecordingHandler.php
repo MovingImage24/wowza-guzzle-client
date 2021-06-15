@@ -52,7 +52,7 @@ class WowzaRecordingHandler extends WowzaApiClient implements RecordingHandler
      * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function stopRecording(string $streamName, string $prefix): void
+    public function stopRecording(string $streamName, string $prefix = ''): void
     {
         $this->recording->setAction('stopRecording');
 
