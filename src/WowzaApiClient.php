@@ -2,9 +2,7 @@
 
 namespace Mi\Bundle\WowzaGuzzleClientBundle;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
 
@@ -23,41 +21,22 @@ class WowzaApiClient
     protected $wowzaConfig;
     protected $client;
 
-    /**
-     * WowzaApiClient constructor.
-     *
-     * @param Client $client
-     */
     public function __construct(ClientInterface $client)
     {
         $this->client = $client;
     }
 
-    /**
-     * @return Config
-     */
-    public function getWowzaConfig()
+    public function getWowzaConfig(): Config
     {
         return $this->wowzaConfig;
     }
 
-    /**
-     * @param Config $wowzaConfig
-     */
-    public function setWowzaConfig($wowzaConfig)
+    public function setWowzaConfig($wowzaConfig): void
     {
         $this->wowzaConfig = $wowzaConfig;
     }
 
-    /**
-     * @param Config $wowzaConfig
-     * @param int $timeout
-     *
-     * @return int
-     *
-     * @throws GuzzleException
-     */
-    public function checkWowzaConfig(Config $wowzaConfig, int $timeout = self::CONNECTION_TIMEOUT)
+    public function checkWowzaConfig(Config $wowzaConfig, int $timeout = self::CONNECTION_TIMEOUT): int
     {
         $url = $wowzaConfig->getApiUrl() . '/livesetmetadata';
 
