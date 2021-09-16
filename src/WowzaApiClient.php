@@ -18,6 +18,7 @@ class WowzaApiClient
     const OPTION_VERSION = 'version';
     const OPTION_APPEND = 'append';
     const OPTION_OVERWRITE = 'overwrite';
+    const CONNECTION_TIMEOUT = 5;
 
     protected $wowzaConfig;
     protected $client;
@@ -50,13 +51,15 @@ class WowzaApiClient
 
     /**
      * @param Config $wowzaConfig
+     * @param int $timeout
      *
-     * @return Integer
+     * @return int
+     *
      * @throws GuzzleException
      */
-    public function checkWowzaConfig(Config $wowzaConfig)
+    public function checkWowzaConfig(Config $wowzaConfig, int $timeout = self::CONNECTION_TIMEOUT)
     {
-        $url = $wowzaConfig->getApiUrl().'/livesetmetadata';
+        $url = $wowzaConfig->getApiUrl() . '/livesetmetadata';
 
 
         try {
@@ -65,7 +68,8 @@ class WowzaApiClient
                 $url,
                 [
                     'auth' => [$wowzaConfig->getUsername(), $wowzaConfig->getPassword(), 'Digest'],
-                    'query' => ['app' => $wowzaConfig->getApp()]
+                    'query' => ['app' => $wowzaConfig->getApp()],
+                    'connect_timeout' => $timeout
                 ]
             );
 

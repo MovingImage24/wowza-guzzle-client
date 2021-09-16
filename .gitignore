@@ -3,3 +3,4 @@ var/
 bin/phpunit
 .idea/
 bin/
+.phpunit.result.cache
