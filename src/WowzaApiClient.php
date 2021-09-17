@@ -36,7 +36,7 @@ class WowzaApiClient
         $this->wowzaConfig = $wowzaConfig;
     }
 
-    public function checkWowzaConfig(Config $wowzaConfig, int $timeout = self::CONNECTION_TIMEOUT): int
+    public function checkWowzaConfig(Config $wowzaConfig, int $timeout = self::CONNECTION_TIMEOUT): ?int
     {
         $url = $wowzaConfig->getApiUrl() . '/livesetmetadata';
 
@@ -54,7 +54,7 @@ class WowzaApiClient
 
             return $result->getStatusCode();
         } catch (RequestException $e) {
-            return $e->getResponse()->getStatusCode();
+            return (null === $e->getResponse()) ? null : $e->getResponse()->getStatusCode();
         }
     }
 }
