@@ -16,7 +16,7 @@ class WowzaApiClient
     const OPTION_VERSION = 'version';
     const OPTION_APPEND = 'append';
     const OPTION_OVERWRITE = 'overwrite';
-    const CONNECTION_TIMEOUT = 5;
+    const DEFAULT_CONNECTION_TIMEOUT = 5;
 
     protected $wowzaConfig;
     protected $client;
@@ -36,7 +36,7 @@ class WowzaApiClient
         $this->wowzaConfig = $wowzaConfig;
     }
 
-    public function checkWowzaConfig(Config $wowzaConfig, int $timeout = self::CONNECTION_TIMEOUT): ?int
+    public function checkWowzaConfig(Config $wowzaConfig, int $timeout = self::DEFAULT_CONNECTION_TIMEOUT): ?int
     {
         $url = $wowzaConfig->getApiUrl() . '/livesetmetadata';
 
