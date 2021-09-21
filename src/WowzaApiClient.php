@@ -2,11 +2,10 @@
 
 namespace Mi\Bundle\WowzaGuzzleClientBundle;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author Jan Arnold <jan.arnold@movingimage.com>
@@ -18,45 +17,29 @@ class WowzaApiClient
     const OPTION_VERSION = 'version';
     const OPTION_APPEND = 'append';
     const OPTION_OVERWRITE = 'overwrite';
+    const DEFAULT_CONNECTION_TIMEOUT = 5;
 
     protected $wowzaConfig;
     protected $client;
 
-    /**
-     * WowzaApiClient constructor.
-     *
-     * @param Client $client
-     */
     public function __construct(ClientInterface $client)
     {
         $this->client = $client;
     }
 
-    /**
-     * @return Config
-     */
-    public function getWowzaConfig()
+    public function getWowzaConfig(): Config
     {
         return $this->wowzaConfig;
     }
 
-    /**
-     * @param Config $wowzaConfig
-     */
-    public function setWowzaConfig($wowzaConfig)
+    public function setWowzaConfig($wowzaConfig): void
     {
         $this->wowzaConfig = $wowzaConfig;
     }
 
-    /**
-     * @param Config $wowzaConfig
-     *
-     * @return Integer
-     * @throws GuzzleException
-     */
-    public function checkWowzaConfig(Config $wowzaConfig)
+    public function checkWowzaConfig(Config $wowzaConfig, int $timeout = self::DEFAULT_CONNECTION_TIMEOUT): ?int
     {
-        $url = $wowzaConfig->getApiUrl().'/livesetmetadata';
+        $url = $wowzaConfig->getApiUrl() . '/livesetmetadata';
 
 
         try {
@@ -65,13 +48,14 @@ class WowzaApiClient
                 $url,
                 [
                     'auth' => [$wowzaConfig->getUsername(), $wowzaConfig->getPassword(), 'Digest'],
-                    'query' => ['app' => $wowzaConfig->getApp()]
+                    'query' => ['app' => $wowzaConfig->getApp()],
+                    'connect_timeout' => $timeout
                 ]
             );
 
             return $result->getStatusCode();
         } catch (RequestException $e) {
-            return $e->getResponse()->getStatusCode();
+            return (null === $e->getResponse()) ? Response::HTTP_BAD_REQUEST : $e->getResponse()->getStatusCode();
         }
     }
 }
