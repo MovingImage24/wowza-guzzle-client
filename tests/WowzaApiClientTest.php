@@ -3,6 +3,7 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Tests;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -15,7 +16,7 @@ class WowzaApiClientTest extends TestCase
     private WowzaConfig $wowzaConfig;
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function setUp(): void
     {
@@ -28,21 +29,21 @@ class WowzaApiClientTest extends TestCase
 
     /**
      * @test
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
-    public function correctWowza()
+    public function correctWowza(): void
     {
         $wowzaApiClient = new WowzaApiClient($this->getClient(200));
-
         $result = $wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
+
         self::assertEquals(200, $result);
     }
 
     /**
      * @test
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
-    public function wrongWowzaHost()
+    public function wrongWowzaHost(): void
     {
         $wowzaApiClient = new WowzaApiClient($this->getClient(404));
 
@@ -52,9 +53,9 @@ class WowzaApiClientTest extends TestCase
 
     /**
      * @test
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
-    public function wrongWowzaPass()
+    public function wrongWowzaPass(): void
     {
         $wowzaApiClient = new WowzaApiClient($this->getClient(401));
 
@@ -64,7 +65,7 @@ class WowzaApiClientTest extends TestCase
 
     /**
      * @test
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function wowzaTimeout()
     {
@@ -76,13 +77,13 @@ class WowzaApiClientTest extends TestCase
 
     /**
      * @test
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
-    public function wowzaInternalError()
+    public function wowzaInternalError(): void
     {
         $wowzaApiClient = new WowzaApiClient($this->getClient(500));
-
         $result = $wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
+
         self::assertEquals(500, $result);
     }
 
@@ -93,7 +94,7 @@ class WowzaApiClientTest extends TestCase
      *
      * @return Client
      */
-    private function getClient($statusCode, $body = '', $headers = [])
+    private function getClient($statusCode, $body = '', $headers = []): Client
     {
         $mock = new MockHandler([
             new Response($statusCode, $headers, $body),

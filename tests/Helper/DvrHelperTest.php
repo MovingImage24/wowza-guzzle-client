@@ -3,9 +3,11 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Tests\Helper;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaDvrHelper;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Dvr\WowzaDvr;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
@@ -29,10 +31,10 @@ class DvrHelperTest extends TestCase
 
     /**
      * @test
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
+     * @throws GuzzleException
+     * @throws MiException
      */
-    public function call()
+    public function call(): void
     {
         $result = $this->obj->call($this->wowzaConfig, 'url', $this->getClient(200, 'bar'));
         self::assertEquals('bar', $result->getBody()->getContents());
@@ -41,14 +43,15 @@ class DvrHelperTest extends TestCase
     /**
      * @test
      *
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
+     * @throws GuzzleException
+     * @throws MiException
      */
     public function callMiException()
     {
-        $this->expectException(\Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException::class);
-        $result = $this->obj->call($this->wowzaConfig, 'url', $this->getClient(404));
-        self::assertEquals(404, $result->getStatusCode());
+        $this->expectException(MiException::class);
+        $this->expectExceptionMessage("Client error: `GET url` resulted in a `404 Not Found` response");
+
+        $this->obj->call($this->wowzaConfig, 'url', $this->getClient(404));
     }
 
     /**
@@ -73,7 +76,7 @@ class DvrHelperTest extends TestCase
      *
      * @return Client
      */
-    private function getClient($statusCode, $body = '', $headers = [])
+    private function getClient($statusCode, $body = '', $headers = []): Client
     {
         $mock = new MockHandler([
             new Response($statusCode, $headers, $body),

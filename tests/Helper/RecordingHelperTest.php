@@ -31,7 +31,7 @@ class RecordingHelperTest extends TestCase
     /**
      * @test
      */
-    public function buildUrlTest()
+    public function buildUrlTest(): void
     {
         $recording = new WowzaRecording();
         $recording->setAction('startRecording');
