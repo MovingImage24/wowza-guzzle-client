@@ -28,7 +28,7 @@ class CuepointHelperTest extends TestCase
     /**
      * @test
      */
-    public function buildUrlTest()
+    public function buildUrlTest(): void
     {
         $cuepoint = new WowzaCuepoint();
         $cuepoint->setStreamname('stream');
@@ -42,9 +42,9 @@ class CuepointHelperTest extends TestCase
 
     /**
      * @test
-     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
+     * @throws MiException
      */
-    public function parseValidResponse()
+    public function parseValidResponse(): void
     {
         $response = new Response(200, ['foo' => 'bar'], 'Timestamp: 123');
         $result = $this->obj->parseResponse($response);
@@ -54,11 +54,11 @@ class CuepointHelperTest extends TestCase
     /**
      * @test
      */
-    public function parseResponseWithIsRequiredException()
+    public function parseResponseWithIsRequiredException(): void
     {
         $this->expectException(MiException::class);
-        $cuepoint = new WowzaCuepoint();
-        $cuepoint->setText('cuepointfoo');
+        $this->expectExceptionMessage('Something is wrong with the response of Wowza server: [body] foobar is required');
+
         $response = new Response('200', ['foo' => 'bar'], 'foobar is required');
         $this->obj->parseResponse($response);
     }
@@ -66,20 +66,12 @@ class CuepointHelperTest extends TestCase
     /**
      * @test
      */
-    public function parseResponseWithNotFoundException()
+    public function parseResponseWithNotFoundException(): void
     {
         $this->expectException(MiException::class);
+        $this->expectExceptionMessage('Something is wrong with the response of Wowza server: [body] foobar not found');
 
-        $cuepoint = new WowzaCuepoint();
-        $cuepoint->setText('cuepointfoo');
         $response = new Response('200', ['foo' => 'bar'], 'foobar not found');
-        $result = $this->obj->parseResponse($response);
-        self::assertEquals(
-            [
-                'code' => 400,
-                'message' => 'Bad Request'
-            ],
-            $result
-        );
+        $this->obj->parseResponse($response);
     }
 }

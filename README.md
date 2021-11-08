@@ -1,7 +1,6 @@
 API Bundle to use the Wowza REST API
 
-[![Build Status](https://travis-ci.org/MovingImage24/wowza-guzzle-client.svg?branch=master)](https://travis-ci.org/MovingImage24/wowza-guzzle-client)
-
+[![Build Status](https://github.com/MovingImage24/wowza-guzzle-client/actions/workflows/verify-pull-request.yml/badge.svg)](https://github.com/MovingImage24/wowza-guzzle-client/actions/workflows/verify-pull-request.yml)
 #Config to use 
 
     mi_wowza_guzzle_client:

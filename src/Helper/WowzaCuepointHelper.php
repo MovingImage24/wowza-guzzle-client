@@ -29,7 +29,7 @@ class WowzaCuepointHelper extends AbstractWowzaHelper
     /**
      * @param Response $response
      *
-     * @return int
+     * @return string
      * @throws MiException
      */
     public function parseResponse(Response $response)
@@ -38,7 +38,7 @@ class WowzaCuepointHelper extends AbstractWowzaHelper
             preg_match('/.* not found/', $response->getBody())
         ) {
             throw new MiException(
-                'Something is wrong with the response of Wowza server: [body] '.$response->getBody()->getContents()
+                'Something is wrong with the response of Wowza server: [body] '. $response->getBody()
             );
         }
 
