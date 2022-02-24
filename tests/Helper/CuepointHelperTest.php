@@ -50,6 +50,7 @@ class CuepointHelperTest extends TestCase
         $response = new Response(200, ['foo' => 'bar'], 'Timestamp: 123');
         $result = $this->obj->getCuepointResponse($response);
         self::assertInstanceOf(ResponseCupoint::class, $result);
+        self::assertEquals('Timestamp: 123', $result->getBody());
         self::assertEquals('123', $result->getTimestamp());
     }
 
