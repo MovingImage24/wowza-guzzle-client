@@ -5,6 +5,7 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Tests\Helper;
 use GuzzleHttp\Psr7\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaCuepointHelper;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\Response as ResponseCupoint;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\WowzaCuepoint;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 use PHPUnit\Framework\TestCase;
@@ -47,8 +48,9 @@ class CuepointHelperTest extends TestCase
     public function parseValidResponse(): void
     {
         $response = new Response(200, ['foo' => 'bar'], 'Timestamp: 123');
-        $result = $this->obj->parseResponse($response);
-        self::assertEquals('123', $result);
+        $result = $this->obj->getCuepointResponse($response);
+        self::assertInstanceOf(ResponseCupoint::class, $result);
+        self::assertEquals('123', $result->getTimestamp());
     }
 
     /**
@@ -60,7 +62,7 @@ class CuepointHelperTest extends TestCase
         $this->expectExceptionMessage('Something is wrong with the response of Wowza server: [body] foobar is required');
 
         $response = new Response('200', ['foo' => 'bar'], 'foobar is required');
-        $this->obj->parseResponse($response);
+        $this->obj->getCuepointResponse($response);
     }
 
     /**
@@ -72,6 +74,6 @@ class CuepointHelperTest extends TestCase
         $this->expectExceptionMessage('Something is wrong with the response of Wowza server: [body] foobar not found');
 
         $response = new Response('200', ['foo' => 'bar'], 'foobar not found');
-        $this->obj->parseResponse($response);
+        $this->obj->getCuepointResponse($response);
     }
 }
