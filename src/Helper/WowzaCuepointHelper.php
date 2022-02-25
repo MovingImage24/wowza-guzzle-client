@@ -50,7 +50,7 @@ class WowzaCuepointHelper extends AbstractWowzaHelper
         }
 
         $responseCuepoint = new ResponseCuepoint();
-        $responseCuepoint->setTimestamp($timestamp);
+        $responseCuepoint->setTimestamp(trim($timestamp));
         $responseCuepoint->setBody($response->getBody());
 
         return $responseCuepoint;
