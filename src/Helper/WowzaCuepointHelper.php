@@ -4,7 +4,7 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Helper;
 
 use GuzzleHttp\Psr7\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException;
-use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\Response as ResponseCupoint;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\Response as ResponseCuepoint;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\WowzaCuepoint;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaModel;
 
@@ -30,10 +30,10 @@ class WowzaCuepointHelper extends AbstractWowzaHelper
     /**
      * @param Response $response
      *
-     * @return ResponseCupoint
+     * @return ResponseCuepoint
      * @throws MiException
      */
-    public function getCuepointResponse(Response $response): ResponseCupoint
+    public function getCuepointResponse(Response $response): ResponseCuepoint
     {
         if (preg_match('/.* is required/', $response->getBody()) ||
             preg_match('/.* not found/', $response->getBody())
@@ -49,6 +49,10 @@ class WowzaCuepointHelper extends AbstractWowzaHelper
             $timestamp = array_pop($responseArray);
         }
 
-        return new ResponseCupoint($timestamp,  $response->getBody());
+        $responseCuepoint = new ResponseCuepoint();
+        $responseCuepoint->setTimestamp($timestamp);
+        $responseCuepoint->setBody($response->getBody());
+
+        return $responseCuepoint;
     }
 }

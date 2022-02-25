@@ -14,10 +14,14 @@ class Response
 
     private string $body;
 
-    public function __construct(int $timestamp, string $body)
+    public function getTimestamp(): int
+    {
+        return $this->timestamp;
+    }
+
+    public function setTimestamp(int $timestamp): void
     {
         $this->timestamp = $timestamp;
-        $this->body = $body;
     }
 
     public function getBody(): string
@@ -25,8 +29,9 @@ class Response
         return $this->body;
     }
 
-    public function getTimestamp(): int
+
+    public function setBody(string $body):void
     {
-        return $this->timestamp;
+        $this->body = $body;
     }
 }
