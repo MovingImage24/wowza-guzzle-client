@@ -3,6 +3,8 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaCuepointHelper;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\WowzaCuepoint;
@@ -15,38 +17,32 @@ use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
  */
 class WowzaCuepointHandler extends WowzaApiClient implements CuepointHandler
 {
-    /**@var WowzaCuepointHelper $cuepointHelper */
-    private $cuepointHelper;
-    /**@var WowzaCuepoint $cuepoint */
-    private $cuepoint;
-    /** @var Response */
-    private $cuepointResponse;
+    private WowzaCuepointHelper $cuepointHelper;
+
+    private WowzaCuepoint $cuepoint;
 
     /**
      * @param Client              $client
      * @param WowzaCuepointHelper $cuepointHelper
      * @param WowzaCuepoint       $cuepointModel
-     * @param Response            $cuepointResponse
      */
     public function __construct(
         Client $client,
         WowzaCuepointHelper $cuepointHelper,
         WowzaCuepoint $cuepointModel,
-        Response $cuepointResponse
     ) {
         parent::__construct($client);
 
         $this->cuepointHelper = $cuepointHelper;
         $this->cuepoint = $cuepointModel;
-        $this->cuepointResponse = $cuepointResponse;
     }
 
     /**
      * @inheritDoc
-     * @throws \Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws MiException
+     * @throws GuzzleException
      */
-    public function insertCuepoint($streamname, $text)
+    public function insertCuepoint($streamname, $text): Response
     {
         $this->cuepoint->setAction('cuepoint');
         $this->cuepoint->setStreamname($streamname);
@@ -54,10 +50,8 @@ class WowzaCuepointHandler extends WowzaApiClient implements CuepointHandler
 
         $url = $this->cuepointHelper->buildUrl('livesetmetadata', $this->wowzaConfig, $this->cuepoint);
         $result = $this->cuepointHelper->call($this->wowzaConfig, $url, $this->client);
-        $parsedResponse = $this->cuepointHelper->parseResponse($result);
-        $this->cuepointResponse->setTimestamp($parsedResponse);
 
-        return $this->cuepointResponse;
+        return $this->cuepointHelper->getCuepointResponse($result);
     }
 
     /**

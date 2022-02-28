@@ -10,24 +10,28 @@ namespace Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint;
  */
 class Response
 {
-    /** @var  int */
-    private $timestamp;
+    private int $timestamp;
 
-    /**
-     * @return int
-     */
-    public function getTimestamp()
+    private string $body;
+
+    public function getTimestamp(): int
     {
         return $this->timestamp;
     }
 
-    /**
-     * @param int $timestamp
-     */
-    public function setTimestamp($timestamp)
+    public function setTimestamp(int $timestamp): void
     {
         $this->timestamp = $timestamp;
     }
 
+    public function getBody(): string
+    {
+        return $this->body;
+    }
 
+
+    public function setBody(string $body):void
+    {
+        $this->body = $body;
+    }
 }
