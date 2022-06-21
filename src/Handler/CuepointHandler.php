@@ -3,23 +3,14 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\Response;
 
 /**
- * @author Jan Arnold <jan.arnold@movingimage.com>
- *
  * @codeCoverageIgnore
  */
 interface CuepointHandler
 {
-    /**
-     * @param string $streamname
-     * @param string $text
-     *
-     * @return JsonResponse
-     */
-    public function insertCuepoint($streamname, $text);
-
+    public function insertCuepoint($streamname, $text): Response;
 
     /**
      * @return Config
