@@ -3,8 +3,6 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Handler;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use Mi\Bundle\WowzaGuzzleClientBundle\Exception\MiException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Helper\WowzaCuepointHelper;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Cuepoint\WowzaCuepoint;
@@ -21,11 +19,6 @@ class WowzaCuepointHandler extends WowzaApiClient implements CuepointHandler
 
     private WowzaCuepoint $cuepoint;
 
-    /**
-     * @param Client              $client
-     * @param WowzaCuepointHelper $cuepointHelper
-     * @param WowzaCuepoint       $cuepointModel
-     */
     public function __construct(
         Client $client,
         WowzaCuepointHelper $cuepointHelper,
@@ -37,11 +30,6 @@ class WowzaCuepointHandler extends WowzaApiClient implements CuepointHandler
         $this->cuepoint = $cuepointModel;
     }
 
-    /**
-     * @inheritDoc
-     * @throws MiException
-     * @throws GuzzleException
-     */
     public function insertCuepoint($streamname, $text): Response
     {
         $this->cuepoint->setAction('cuepoint');
@@ -54,17 +42,11 @@ class WowzaCuepointHandler extends WowzaApiClient implements CuepointHandler
         return $this->cuepointHelper->getCuepointResponse($result);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getConfig()
     {
         parent::getWowzaConfig();
     }
 
-    /**
-     * @inheritDoc
-     */
     public function setConfig($config)
     {
         parent::setWowzaConfig($config);
