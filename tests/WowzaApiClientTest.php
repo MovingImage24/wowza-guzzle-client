@@ -3,13 +3,16 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle\Tests;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Mi\Bundle\WowzaGuzzleClientBundle\WowzaApiClient;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\WowzaConfig;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
 class WowzaApiClientTest extends TestCase
 {
@@ -88,6 +91,19 @@ class WowzaApiClientTest extends TestCase
     }
 
     /**
+     * @test
+     */
+    public function wowzaRequestException(): void
+    {
+        $wowzaApiClient = new WowzaApiClient(
+            $this->getClientThrowsException(new ConnectException("", new Request('get', 'GET')))
+        );
+        $result = $wowzaApiClient->checkWowzaConfig($this->wowzaConfig);
+
+        self::assertEquals(HttpFoundationResponse::HTTP_BAD_REQUEST, $result);
+    }
+
+    /**
      * @param       $statusCode
      * @param       $body
      * @param array $headers
@@ -96,9 +112,21 @@ class WowzaApiClientTest extends TestCase
      */
     private function getClient($statusCode, $body = '', $headers = []): Client
     {
-        $mock = new MockHandler([
+        return $this->buildClient([
             new Response($statusCode, $headers, $body),
         ]);
+    }
+
+    private function getClientThrowsException(GuzzleException $exception): Client
+    {
+        return $this->buildClient([
+            $exception,
+        ]);
+    }
+
+    private function buildClient(array $queue): Client
+    {
+        $mock = new MockHandler($queue);
         $handler = HandlerStack::create($mock);
 
         return new Client([
