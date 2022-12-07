@@ -3,6 +3,7 @@
 namespace Mi\Bundle\WowzaGuzzleClientBundle;
 
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use Mi\Bundle\WowzaGuzzleClientBundle\Model\Config;
 use Symfony\Component\HttpFoundation\Response;
@@ -56,6 +57,8 @@ class WowzaApiClient
             return $result->getStatusCode();
         } catch (RequestException $e) {
             return (null === $e->getResponse()) ? Response::HTTP_BAD_REQUEST : $e->getResponse()->getStatusCode();
+        } catch (ConnectException $e) {
+            return Response::HTTP_BAD_REQUEST;
         }
     }
 }
